@@ -9,14 +9,14 @@
 - 구조: Java GUI → DAO(표마다 하나) → JDBC → 클라우드 MySQL
 
 ## 실행 방법
-팀원 모두 **같은 클라우드 DB**를 사용합니다. MySQL을 따로 설치하거나 `schema.sql`을 실행할 필요가 없습니다.
+같은 클라우드 DB 를 사용합니다. MySQL을 따로 설치하거나 `schema.sql`을 실행할 필요가 없습니다.
 
 1. GitHub Desktop에서 이 레포를 Clone 합니다. (`File` → `Clone repository`)
 2. Eclipse에서 프로젝트를 가져옵니다. (`File` → `Import` → `Existing Projects into Workspace` → 클론한 폴더 선택)
 3. MySQL Connector/J jar를 추가합니다.
    - 프로젝트 우클릭 → `Build Path` → `Configure Build Path` → `Libraries` → `Classpath` → `Add External JARs...`
-4. `src/teamproject/Main.java`를 실행하고, 비밀번호 창에 **DB 비밀번호**를 입력합니다.
-   - DB 비밀번호는 단톡방으로만 공유합니다. **코드·README·GitHub에 절대 적지 마세요.**
+4. `src/teamproject/Main.java`를 실행하고, 비밀번호 창에 DB 비밀번호를 입력합니다.
+   - DB 비밀번호는 단톡방으로만 공유합니다.
 
 ※ Aiven 무료 서비스는 오래 사용하지 않으면 자동으로 꺼질 수 있습니다. 연결이 안 되면 팀장에게 알려주세요. (발표 전 Running 상태 확인)
 
@@ -42,9 +42,8 @@ DB 비밀번호(접속용)와 위 로그인 비밀번호는 서로 다른 것입
 | `schedules` | 일정 |
 | `materials` | 자료(링크) |
 
-- 진행률은 별도 표 없이 `tasks`의 완료 개수 / 전체 개수로 계산합니다.
+- 진행률은 별도 표 없이 tasks의 완료 개수 / 전체 개수로 계산합니다.
 - `db/schema.sql`은 DB 구조 참고용입니다. (클라우드에 이미 반영되어 있으니 다시 실행하지 마세요.)
-- **DB 구조는 확정이므로 표를 수정하지 마세요.** 변경이 필요하면 팀장과 먼저 상의합니다.
 
 ## 파일 구조
 ```
@@ -70,9 +69,9 @@ String name = UserDAO.login(conn, loginId, password);
 ```
 
 ## 역할 분담
-| 이름 | 담당 |
-|---|---|
-| 장현민 (팀장) | DB 설계, JDBC 연결, 로그인 확인 로직, 로그인 화면 기본 구현 |
+|  이름  |
+|--------|
+| 장현민 | DB 설계, JDBC 연결, 로그인 확인 로직, 로그인 화면 기본 구현 |
 | 이해찬 | 로그인 화면 (LoginFrame) |
 | 윤정훈 | 업무 관리 GUI |
 | 이동주 | 일정, 진행률 |
