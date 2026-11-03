@@ -5,6 +5,9 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클래스 | extends 키워드 :  JFrame의 기능 상속
 
     // 업무 목록을 표시할 표
@@ -12,7 +15,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
     private DefaultTableModel tableModel; //표 데이터 관리하는 역할
 	
     // 업무 관리 화면 생성
-    public TaskFrame() {
+    public TaskFrame(Connection conn) throws SQLException{
 
         setTitle("팀프로젝트 관리 프로그램"); //프로그램 창 제목 지정
         setSize(800, 500); // 창 크기 : 800x500
@@ -34,5 +37,6 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
         JScrollPane scrollPane = new JScrollPane(taskTable); //스크롤 기능
 
         add(scrollPane); //Swing 창에 컴포넌트 추가 메서드
+        TaskDAO.loadTasks(conn, tableModel);
     }
 }

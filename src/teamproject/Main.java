@@ -30,38 +30,22 @@ public class Main {
     	 
     	  char[] passwordChars = passwordField.getPassword();
           String password = new String(passwordChars); //문자열로 변환
-          Arrays.fill(passwordChars, '\0'); //보안을 위해 사용이끝난 passwordChars 문자배열을 널 문자로 덮어씀.
+          Arrays.fill(passwordChars, '\0'); //보안을 위해 사용이끝난 passwordChars 문자배열을 \0으로 덮어씀.
     	 
 
 
-        try (Connection conn = DB_connection.getConnection(password)) {//DB_connection 클래스의 정적메서드 호출
+          try {
+              // try-with-resources 대신 일반 try 사용: 연결을 닫지 않고 LoginFrame에 넘겨줌
+              Connection conn = DB_connection.getConnection(password); // DB_connection 클래스의 정적메서드 호출
 
-            System.out.println("MySQL 연결 성공!");
-            
-            System.out.println("===== 업무 목록 =====");
-            TaskDAO.showTasks(conn); //TaskDao 클래스 참고
-            
-            System.out.println("===== 로그인 테스트 =====");
-            
-            // 테스트 1: 맞는 아이디와 비밀번호
-            String name1 = UserDAO.login(conn, "20253289", "1234");
-            if (name1 != null) {
-                System.out.println("로그인 성공: " + name1);
-            } else {
-                System.out.println("로그인 실패");
-            }
+              System.out.println("MySQL 연결 성공!");
 
-            //업무관리 GUI 생성자 실행
-            TaskFrame frame = new TaskFrame();
-            frame.setVisible(true); //창 띄우는 코드
+              new LoginFrame(conn).setVisible(true); // 로그인 창 띄우기
 
-        } catch (SQLException e) {//예외 반환 시 
-
-            System.out.println("MySQL 연결 실패!");
-            System.out.println(e.getMessage());
-
-        } finally {
-            password = null; //password 문자열의 참조 해제
-        }
-    }
-}
+          } catch (SQLException e) { // 연결 실패 시
+              JOptionPane.showMessageDialog(null,
+                      "MySQL 연결 실패: " + e.getMessage(),
+                      "오류", JOptionPane.ERROR_MESSAGE);
+          }
+      }
+  }

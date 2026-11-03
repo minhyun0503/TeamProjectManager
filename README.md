@@ -52,7 +52,8 @@ TeamProjectManager/
 ├── src/
 │   ├── module-info.java
 │   └── teamproject/
-│       ├── Main.java            프로그램 시작, DB 비밀번호 입력, 연결
+│       ├── Main.java            프로그램 시작, DB 비밀번호 입력, 연결 후 로그인 창 실행
+│       ├── LoginFrame.java      로그인 화면 (성공하면 업무 화면으로 이동)
 │       ├── DB_connection.java   클라우드 MySQL 연결
 │       ├── UserDAO.java         users 표 처리 (로그인 확인)
 │       ├── TaskDAO.java         tasks 표 처리 (업무 조회, users와 JOIN)
@@ -71,7 +72,7 @@ String name = UserDAO.login(conn, loginId, password);
 ## 역할 분담
 | 이름 | 담당 |
 |---|---|
-| 장현민 (팀장) | DB 설계, JDBC 연결, 로그인 확인 로직 |
+| 장현민 (팀장) | DB 설계, JDBC 연결, 로그인 확인 로직, 로그인 화면 기본 구현 |
 | 이해찬 | 로그인 화면 (LoginFrame) |
 | 윤정훈 | 업무 관리 GUI |
 | 이동주 | 일정, 진행률 |
@@ -82,11 +83,12 @@ String name = UserDAO.login(conn, loginId, password);
 - [x] 클라우드 MySQL 연결 (`DB_connection`)
 - [x] 로그인 확인 (`UserDAO.login`)
 - [x] 업무 목록 조회 (`TaskDAO.showTasks`, `TaskDAO.loadTasks`)
-- [ ] 로그인 화면 (GUI)
-- [ ] 업무 목록 표에 데이터 표시 (`TaskFrame`에서 `loadTasks` 호출)
+- [x] 로그인 화면 (`LoginFrame`)
+- [x] 로그인 성공 후 업무 목록 표 표시 (`TaskFrame`에서 `loadTasks` 호출)
 - [ ] 업무 등록 · 완료 처리 (GUI)
 - [ ] 일정 · 자료 · 대시보드
 
 ## 참고
-- `Main`의 로그인 테스트(학번 직접 입력)는 로그인 화면이 완성되면 교체합니다.
-- `Main`의 `try` 블록이 끝나면 DB 연결이 닫히므로, 이후 화면에서 DB를 계속 쓰려면 연결을 유지하는 방식으로 바꿔야 합니다.
+- 실행 흐름: `Main`(DB 연결) → `LoginFrame`(로그인) → `TaskFrame`(업무 목록)
+- DB 연결(`conn`)은 `Main`에서 만들어 화면끼리 넘겨 가며 하나만 사용합니다. (프로그램이 끝나면 자동으로 닫힘)
+- 새 화면에서 DB가 필요하면 생성자에서 `Connection conn`을 전달받아 사용하세요.
