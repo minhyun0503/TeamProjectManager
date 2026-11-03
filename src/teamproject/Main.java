@@ -51,14 +51,6 @@ public class Main {
                 System.out.println("로그인 실패");
             }
 
-            // 테스트 2: 틀린 비밀번호
-            String name2 = UserDAO.login(conn, "20253289", "9999");
-            if (name2 != null) {
-                System.out.println("로그인 성공: " + name2);
-            } else {
-                System.out.println("로그인 실패");
-            }
-            
             //업무관리 GUI 생성자 실행
             TaskFrame frame = new TaskFrame();
             frame.setVisible(true); //창 띄우는 코드

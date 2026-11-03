@@ -8,9 +8,9 @@ public class DB_connection {//mySQL 연결 담당 클래스
 
     // MySQL 접속 정보
     private static final String URL = //URL
-            "jdbc:mysql://127.0.0.1:3306/team_project";
+            "jdbc:mysql://mysql-3b00e226-minhyun030503-11b1.b.aivencloud.com:22196/team_project?sslMode=REQUIRED";
 
-    private static final String USER = "root";
+    private static final String USER = "avnadmin";
 
     // 데이터베이스 연결 메서드
     public static Connection getConnection(String password)//비밀번호를 매개변수로 전달받고, MySQL연결 객체 반환 메서드
