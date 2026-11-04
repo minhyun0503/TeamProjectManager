@@ -13,8 +13,8 @@
 
 1. GitHub Desktop에서 이 레포를 Clone 합니다. (`File` → `Clone repository`)
 2. Eclipse에서 프로젝트를 가져옵니다. (`File` → `Import` → `Existing Projects into Workspace` → 클론한 폴더 선택)
-3. MySQL Connector/J jar를 추가합니다.
-   - 프로젝트 우클릭 → `Build Path` → `Configure Build Path` → `Libraries` → `Classpath` → `Add External JARs...`
+3. MySQL Connector/J(JDBC 드라이버)는 `lib` 폴더에 포함되어 있어서 따로 추가할 필요가 없습니다.
+   - 빨간 오류가 보이면 프로젝트 우클릭 → `Refresh`(F5) 후 `Project` → `Clean`을 해보세요.
 4. `src/teamproject/Main.java`를 실행하고, 비밀번호 창에 DB 비밀번호를 입력합니다.
    - DB 비밀번호는 단톡방으로만 공유합니다.
 
@@ -58,6 +58,8 @@ TeamProjectManager/
 │       ├── UserDAO.java         users 표 처리 (로그인 확인)
 │       ├── TaskDAO.java         tasks 표 처리 (업무 조회, users와 JOIN)
 │       └── TaskFrame.java       업무 목록 GUI
+├── lib/
+│   └── mysql-connector-j-26.10.0.jar   MySQL JDBC 드라이버
 ├── db/
 │   └── schema.sql               DB 생성 SQL (참고용)
 └── README.md
