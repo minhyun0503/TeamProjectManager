@@ -11,9 +11,9 @@ import javax.swing.JOptionPane;
 
 public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클래스 | extends 키워드 :  JFrame의 기능 상속
 
-    // 업무 목록을 표시할 표
-    private JTable taskTable; //표 화면에 표시하는 역할
-    private DefaultTableModel tableModel; //표 데이터 관리하는 역할
+    // taskTable과 tableModel을 잘구분해서 코드 이해하기.
+    private JTable taskTable; //데이터를 화면에 어떻게 표로 보여주는지, 창
+    private DefaultTableModel tableModel; //어떤 데이터를 담고 있는지, 데이터
 	
     // 업무 관리 화면 생성
     public TaskFrame(Connection conn) throws SQLException{
@@ -30,27 +30,25 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
         		"번호", "업무명", "담당자", "마감일", "상태"
         };
     
-        tableModel = new DefaultTableModel(columns, 0) {
+        tableModel = new DefaultTableModel(columns, 0) {//열 이름을 표시하고, 기본 데이터는 0
             @Override
-            public boolean isCellEditable(int row, int column) {
+            public boolean isCellEditable(int row, int column) {//사용자가 표의 셀을 직접 수정못하게 하는 코드
                 return false;
             }
         };
 
-        // 표 화면 생성 및 스크롤 기능 추가
-        taskTable = new JTable(tableModel);
+        taskTable = new JTable(tableModel); //화면에 보이는 표를 생성 (이 시점까지 표안에 데이터 x)
         
-        JScrollPane scrollPane = new JScrollPane(taskTable); //스크롤 기능
+        JScrollPane scrollPane = new JScrollPane(taskTable); //taskTable을 스크롤 가능한 영역 안에 추가
         
-        System.out.println("마우스 이벤트 등록 완료!");
      // 업무 목록 더블클릭 시 팀원 관리창 열기
-        taskTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        taskTable.addMouseListener(new java.awt.event.MouseAdapter() {//더블 클릭 시 실행할 동작 등록하는 메서드
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 2) {//클릭이 2번???
                     try {
-                        System.out.println("더블클릭 감지!");
-                        MemberFrame frame = new MemberFrame(conn, 1);
+                        System.out.println("더블클릭 감지");
+                        MemberFrame frame = new MemberFrame(conn, 1);//조회된 업무현황 표를 더블 클릭 시 해당 팀원을 표시(현재는 1번팀으로만 고정값)
                         frame.setVisible(true);
                     } catch (SQLException ex) {
                         ex.printStackTrace();
@@ -60,7 +58,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
             }
         });
 
-        add(scrollPane); //Swing 창에 컴포넌트 추가 메서드
-        TaskDAO.loadTasks(conn, tableModel);
+        add(scrollPane); //Swing 창에 스크롤 가능한 표 배치
+        TaskDAO.loadTasks(conn, tableModel); //taskDAO클래스에서 tableModel(표)에 데이터 채워넣는 단계
     }
 }

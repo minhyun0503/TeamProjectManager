@@ -31,15 +31,15 @@ public class MemberFrame extends JFrame {
 	private int teamId;
 
 	// 팀원 등록 버튼
-	private JButton addButton;
-	private JButton updateButton;
+	private JButton addButton; //팀원 추가 버튼
+	private JButton updateButton; //팀원 수정 버튼
 	private JButton deleteButton; // 팀원 삭제 버튼
 
     // 팀원 목록을 표시할 표
     private JTable memberTable;
 
     // 표의 데이터를 관리할 모델
-    private DefaultTableModel tableModel;
+    private DefaultTableModel tableModel; //유의 : taskFrame의 tableModel처럼 동작
 
     // 팀원 관리 화면 생성
     public MemberFrame(Connection conn, int teamId) throws SQLException {

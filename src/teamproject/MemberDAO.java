@@ -40,7 +40,7 @@
 	        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 	            // ? 자리에 조회할 팀 번호 입력
-	            pstmt.setInt(1, teamId);
+	            pstmt.setInt(1, teamId); //1번으로 고정(수정필요!!)
 
 	            // SQL 실행 후 조회 결과 저장
 	            try (ResultSet rs = pstmt.executeQuery()) {
