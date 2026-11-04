@@ -16,7 +16,7 @@ public class Main {
     	JPasswordField passwordField = new JPasswordField(); //비밀번호 입력칸 객체 생성
     	 
     	 int result = JOptionPane.showConfirmDialog(
-                 null,
+                 null,	
                  passwordField,
                  "MySQL 비밀번호 입력",
                  JOptionPane.OK_CANCEL_OPTION,
@@ -40,7 +40,13 @@ public class Main {
 
               System.out.println("MySQL 연결 성공!");
 
-              new LoginFrame(conn).setVisible(true); // 로그인 창 띄우기
+              //new LoginFrame(conn).setVisible(true); // 로그인 창 띄우기
+              
+           // 업무 관리 화면 생성
+              TaskFrame frame = new TaskFrame(conn);
+
+              // 업무 관리 창 띄우기
+              frame.setVisible(true);
 
           } catch (SQLException e) { // 연결 실패 시
               JOptionPane.showMessageDialog(null,
