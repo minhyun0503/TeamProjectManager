@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Date;
 import java.time.LocalDate;
 
-// [이동주 담당 2] 기존 DB에서 데이터를 읽습니다. DB 내용을 바꾸지는 않습니다.
+// [이*주 담당 2] 기존 DB에서 데이터를 읽습니다. DB 내용을 바꾸지는 않습니다.
 public class InlineProgressDAO {
 
     public static InlineProgressData load(Connection conn, int teamId) throws SQLException {
