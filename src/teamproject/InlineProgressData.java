@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
-// [이동주 담당 1] 업무 데이터를 보관하고 진행률과 남은 날짜를 계산합니다.
+// [이*주 담당 1] 업무 데이터를 보관하고 진행률과 남은 날짜를 계산합니다.
 public class InlineProgressData {
 
     // 한 명의 팀원 정보를 담는 작은 클래스입니다.
