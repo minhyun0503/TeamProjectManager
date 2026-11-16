@@ -18,7 +18,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-// [이동주 담당 3] 계산한 값을 기존 업무 화면에 보여줍니다.
+// [이*주 담당 3] 계산한 값을 기존 업무 화면에 보여줍니다.
 // ActionListener: 버튼 클릭과 이름 선택을 처리합니다.
 // 업무 변경 후에는 새로고침 버튼을 눌러 진행률과 마감 안내를 갱신합니다.
 public class InlineProgressPanel extends JPanel
