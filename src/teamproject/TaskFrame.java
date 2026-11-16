@@ -108,7 +108,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
         add(buttonPanel, BorderLayout.SOUTH); // 버튼 패널을 화면 아래에 배치
         TaskDAO.loadTasks(conn, tableModel); //taskDAO클래스에서 tableModel(표)에 데이터 채워넣는 단계
-        InlineProgressPanel.attach(this, conn, tableModel, teamId); // [이동주 추가] 진행률 연결
+        InlineProgressPanel.attach(this, conn, tableModel, teamId); // [이*주 추가] 진행률 연결
 
         // [열 너비 추가] 표 내용이 바뀔 때마다(조회, 등록, 수정 등) 열 너비를 글자 길이에 맞춘다
         tableModel.addTableModelListener(e -> SwingUtilities.invokeLater(this::fitColumns));
