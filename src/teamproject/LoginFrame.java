@@ -71,7 +71,7 @@ public class LoginFrame extends JFrame { // 로그인 창 (JFrame을 상속)
 
             if (name != null) {
                 JOptionPane.showMessageDialog(this, name + "님 환영합니다!");
-                new TaskFrame(conn).setVisible(true); // 업무 화면 열기
+                new MainFrame(conn).setVisible(true); // 대시보드·업무·팀원·자료 통합 화면 열기
                 dispose();                            // 로그인 창 닫기
             } else {
                 JOptionPane.showMessageDialog(this,
