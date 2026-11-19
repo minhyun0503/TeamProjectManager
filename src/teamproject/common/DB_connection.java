@@ -1,21 +1,25 @@
 package teamproject.common;
 
+// 브리핑 담당: 장*민 | 파일별 설명: docs/02_common.md
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DB_connection {//mySQL 연결 담당 클래스
+// 원본과 같은 JDBC 연결 방식입니다. 실행할 때 정한 접속 정보를 메모리에만 둡니다.
+public class DB_connection {
+  private static String url;
+  private static String user;
+  private static String password;
 
-    // MySQL 접속 정보
-    private static final String URL = //URL
-            "jdbc:mysql://mysql-3b00e226-minhyun030503-11b1.b.aivencloud.com:22196/team_project?sslMode=REQUIRED";
+  public static void configure(String jdbcUrl, String username, String dbPassword) {
+    url = jdbcUrl;
+    user = username;
+    password = dbPassword;
+  }
 
-    private static final String USER = "avnadmin";
-
-    // 데이터베이스 연결 메서드
-    public static Connection getConnection(String password)//비밀번호를 매개변수로 전달받고, MySQL연결 객체 반환 메서드
-            throws SQLException {//SQL관련 오류 발생 시 호출한 쪽(MAIN)으로 전달
-
-        return DriverManager.getConnection(URL, USER, password); //JDBC를 사용해 데이터베이스 연결 생성후 호출한 쪽(MAIN)으로 반환
-    }
+  // 일반 화면용 연결과 자동 갱신 작업용 연결을 따로 열어 서로 방해하지 않게 합니다.
+  public static Connection open() throws SQLException {
+    return DriverManager.getConnection(url, user, password);
+  }
 }

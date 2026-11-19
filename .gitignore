@@ -1,4 +1,9 @@
 bin/
-.settings/
-*.class
 test-bin/
+data/
+*.class
+*.mv.db
+*.trace.db
+.settings/
+
+.sources.txt
