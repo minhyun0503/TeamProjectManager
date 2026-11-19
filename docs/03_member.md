@@ -1,5 +1,7 @@
 # 이*찬 — 로그인·팀원·공유 메모 브리핑
 
+[먼저 읽는 쉬운 설명](easy/member.md) → 이 문서 → [실제 코드 색인](07_code_index.md) 순서로 확인하세요.
+
 담당 파일은 member 패키지의 UserDAO, LoginFrame, MemberDAO, MemberFrame, NoteDAO, NotePanel입니다. 기존 로그인·팀원 관리에 **사용자를 식별할 수 있는 공유 메모**를 추가했습니다. 메모에서 업무를 만드는 창과 SQL은 윤*훈 담당 파일을 호출합니다.
 
 ## 기존 로그인과 팀원 관리

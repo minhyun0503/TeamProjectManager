@@ -1,5 +1,7 @@
 # 윤*훈 — 업무 CRUD·보드·메모 연결 브리핑
 
+[먼저 읽는 쉬운 설명](easy/task.md) → 이 문서 → [실제 코드 색인](07_code_index.md) 순서로 확인하세요.
+
 담당은 task 패키지의 TaskDAO, TaskFrame, TaskBoardPanel, TaskCardRenderer, TaskFromNoteDialog입니다. 기존 CRUD와 진행률 연결을 유지하고, **같은 tasks 데이터를 표·보드·내 업무로 다르게 보여주는 기능**을 추가했습니다.
 
 ## 먼저 이해할 객체

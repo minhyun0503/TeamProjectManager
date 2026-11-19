@@ -1,5 +1,7 @@
 # 장*민 — DB·공통 시스템 브리핑
 
+[먼저 읽는 쉬운 설명](easy/common.md) → 이 문서 → [실제 코드 색인](07_code_index.md) 순서로 확인하세요.
+
 담당 범위는 `common` 패키지의 Main, DB_connection, SchemaSetup, TeamDAO, ActivityDAO와 schema.sql입니다. **어떤 화면이 열려도 같은 사용자·팀 데이터를 사용하도록 기반을 제공하는 역할**입니다. ActivityPanel 화면은 신*준 담당이며 기록 저장·조회 DAO는 이 문서의 담당입니다.
 
 ## 시작 전에 알아둘 값

@@ -1,5 +1,7 @@
 # 신*준 — 자료·대시보드·아이디어 협업 브리핑
 
+[먼저 읽는 쉬운 설명](easy/resource.md) → 이 문서 → [실제 코드 색인](07_code_index.md) 순서로 확인하세요.
+
 담당 파일은 resource 패키지의 MainFrame, DashboardPanel, MaterialDAO, MaterialPanel, IdeaDAO, IdeaPanel, IdeaCardRenderer, ActivityPanel입니다. 공통 ActivityDAO는 장*민 담당이며, 이 영역은 기록을 보여주는 화면을 맡습니다.
 
 ## 통합 MainFrame

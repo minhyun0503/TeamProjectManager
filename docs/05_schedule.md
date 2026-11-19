@@ -1,5 +1,7 @@
 # 이*주 — 진행률·일정·달력 브리핑
 
+[먼저 읽는 쉬운 설명](easy/schedule.md) → 이 문서 → [실제 코드 색인](07_code_index.md) 순서로 확인하세요.
+
 담당은 schedule 패키지의 InlineProgressData, InlineProgressDAO, InlineProgressPanel, ScheduleDAO, SchedulePanel입니다. **진행률은 기존 tasks를 계산하고, 일정은 schedules를 조회한다**는 차이부터 설명하세요. 일정 개수로 업무 완료율을 계산하지 않습니다.
 
 ## 진행률 데이터
