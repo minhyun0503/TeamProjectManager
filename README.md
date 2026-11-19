@@ -1,5 +1,7 @@
 # 팀프로젝트 관리 프로그램 — 피드백 반영·브리핑 학습 버전
 
+**파일을 열어 하나씩 설명하는 브리핑은 [팀원별 소스 브리핑](docs/member_briefings/README.md)을 사용하세요.** 개인 HTML에는 전체 코드·줄 강조·구간별 설명, 개인 PDF에는 같은 설명을 담았습니다.
+
 **처음 읽는 조원은 [쉽게 읽는 설명서](docs/easy/index.md)부터 보세요.** 공통 1장과 본인 담당 1장을 먼저 읽는 구성이고, [6장 PDF](output/pdf/team_project_briefing.pdf)와 [한 파일로 읽는 HTML](docs/easy_guide.html)을 제공합니다.
 
 이 브랜치에는 피드백 반영 프로그램 **TeamProjectManagerFeedback 하나만** 있습니다. 저장소 루트의 `.project`를 기준으로 Eclipse에서 가져오면 됩니다. 기존 작성본은 `main`과 `refactor/member-packages` 브랜치 및 이전 커밋에 보존되어 있습니다.
