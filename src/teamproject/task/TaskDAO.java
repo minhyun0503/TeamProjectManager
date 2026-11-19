@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.task;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,81 +11,48 @@ import javax.swing.table.DefaultTableModel;
 
 public class TaskDAO {//데이터베이스 조회 및 관리 클래스
 
-    // 데이터베이스에 저장된 업무 목록 조회 메서드
-    public static void showTasks(Connection conn)
-            throws SQLException {
-
+    // 선택한 팀의 업무만 조회합니다.
+    public static void showTasks(Connection conn, int teamId) throws SQLException {
         String sql = """
-                SELECT
-                    tasks.task_id,
-                    tasks.title,
-                    users.name,
-                    tasks.due_date,
-                    tasks.status
-                FROM tasks
-                JOIN users
-                    ON tasks.assignee_id = users.user_id
-                ORDER BY tasks.task_id
-                """;//SQL DB와 소통할때 사용할 문자열(코드) / 이렇게 보내면 해당데이터를 알수있음.
-
-        // SQL 실행 및 결과 가져오기
-        try (PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-        	//PreparedStatement : SQL을 준비하고 실행하는 객체의 자료형 (JDBC)
-    		//prepareStatement(sql): 실행할 SQL을 준비하는 메서드
-        	//executeQuery() : psmt를 실행 후 결과반환 하는 메서드
-        	//ResultSet: SQL 조회 결과 보관하는 인터페이스
-
-            // 조회된 업무를 한 줄씩 출력
-            while (rs.next()) {
-                System.out.println(
-                        rs.getInt("task_id") + " | " +
-                        rs.getString("title") + " | " +
-                        rs.getString("name") + " | " +
-                        rs.getDate("due_date") + " | " +
-                        rs.getString("status")
-                );
+                SELECT t.task_id, t.title, u.name, t.due_date, t.status
+                FROM tasks t
+                JOIN users u ON t.assignee_id = u.user_id
+                WHERE t.team_id = ?
+                ORDER BY t.task_id
+                """;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println(rs.getInt("task_id") + " | "
+                            + rs.getString("title") + " | " + rs.getString("name") + " | "
+                            + rs.getDate("due_date") + " | " + rs.getString("status"));
+                }
             }
         }
     }
 
-    // 조회한 업무 데이터를 GUI 표에 추가
-    public static void loadTasks(
-            Connection conn,
-            DefaultTableModel tableModel) throws SQLException {
-
+    // 조회한 업무 데이터를 GUI 표에 추가합니다. 진행률 패널의 마감 안내 열은 유지합니다.
+    public static void loadTasks(Connection conn, DefaultTableModel tableModel, int teamId)
+            throws SQLException {
         String sql = """
-        SELECT
-            tasks.task_id,
-            tasks.title,
-            users.name,
-            tasks.due_date,
-            tasks.status
-        FROM tasks
-        JOIN users
-            ON tasks.assignee_id = users.user_id
-        ORDER BY tasks.task_id
-        """; //SQL DB와 소통할때 사용할 문자열(코드)
-
-        // TaskFrame에서 만든 tableModle 초기화 (해당 파일에서도 값은 0이지만 한번더)
+                SELECT t.task_id, t.title, u.name, t.due_date, t.status
+                FROM tasks t
+                JOIN users u ON t.assignee_id = u.user_id
+                WHERE t.team_id = ?
+                ORDER BY t.task_id
+                """;
         tableModel.setRowCount(0);
-
-        // SQL 실행 및 업무 데이터 조회
-        try (PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            while (rs.next()) {
-
-                Object[] row = {
-                    rs.getInt("task_id"),
-                    rs.getString("title"),
-                    rs.getString("name"),
-                    rs.getDate("due_date"),
-                    rs.getString("status")
-                };
-
-                // 조회한 업무를 표의 행에 추가
-                tableModel.addRow(row);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Object[] row = {
+                        rs.getInt("task_id"), rs.getString("title"), rs.getString("name"),
+                        rs.getDate("due_date"), rs.getString("status")
+                    };
+                    tableModel.addRow(row);
+                }
             }
         }
     }
@@ -185,7 +152,7 @@ public class TaskDAO {//데이터베이스 조회 및 관리 클래스
     }
 
     // 업무 한 건 조회 (수정 화면에 기존 내용을 채울 때 사용). 없으면 null 반환
-    public static TaskInfo findTask(Connection conn, int taskId)
+    public static TaskInfo findTask(Connection conn, int teamId, int taskId)
             throws SQLException {
 
         String sql = """
@@ -196,12 +163,13 @@ public class TaskDAO {//데이터베이스 조회 및 관리 클래스
                     status,
                     due_date
                 FROM tasks
-                WHERE task_id = ?
+                WHERE task_id = ? AND team_id = ?
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, taskId);
+            pstmt.setInt(2, teamId);
 
             try (ResultSet rs = pstmt.executeQuery()) {
 
@@ -232,6 +200,8 @@ public class TaskDAO {//데이터베이스 조회 및 관리 클래스
             String status,
             LocalDate dueDate) throws SQLException {
 
+        requireTeamMember(conn, teamId, assigneeId);
+
         // tasks 테이블에 업무를 저장하는 SQL
         String sql = """
                 INSERT INTO tasks (team_id, title, description, assignee_id, status, due_date)
@@ -257,6 +227,7 @@ public class TaskDAO {//데이터베이스 조회 및 관리 클래스
     // 반환값: 수정된 줄이 있으면 true, 이미 삭제된 업무라 수정할 줄이 없으면 false
     public static boolean updateTask(
             Connection conn,
+            int teamId,
             int taskId,
             String title,
             String description,
@@ -264,10 +235,12 @@ public class TaskDAO {//데이터베이스 조회 및 관리 클래스
             String status,
             LocalDate dueDate) throws SQLException {
 
+        requireTeamMember(conn, teamId, assigneeId);
+
         String sql = """
                 UPDATE tasks
                 SET title = ?, description = ?, assignee_id = ?, status = ?, due_date = ?
-                WHERE task_id = ?
+                WHERE task_id = ? AND team_id = ?
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -278,6 +251,7 @@ public class TaskDAO {//데이터베이스 조회 및 관리 클래스
             pstmt.setString(4, status);
             pstmt.setDate(5, java.sql.Date.valueOf(dueDate));
             pstmt.setInt(6, taskId); // WHERE 조건: 어떤 업무를 수정할지
+            pstmt.setInt(7, teamId);
 
             // executeUpdate()는 영향받은 줄 수를 돌려준다
             return pstmt.executeUpdate() > 0;
@@ -285,27 +259,41 @@ public class TaskDAO {//데이터베이스 조회 및 관리 클래스
     }
 
     // 업무 상태만 바꾸는 메서드 (예: 완료 처리 버튼)
-    public static boolean updateTaskStatus(Connection conn, int taskId, String status)
+    public static boolean updateTaskStatus(Connection conn, int teamId, int taskId, String status)
             throws SQLException {
 
-        String sql = "UPDATE tasks SET status = ? WHERE task_id = ?";
+        String sql = "UPDATE tasks SET status = ? WHERE task_id = ? AND team_id = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, status);
             pstmt.setInt(2, taskId);
+            pstmt.setInt(3, teamId);
             return pstmt.executeUpdate() > 0;
         }
     }
 
     // 업무 삭제 메서드. 삭제된 줄이 있으면 true
-    public static boolean deleteTask(Connection conn, int taskId)
+    public static boolean deleteTask(Connection conn, int teamId, int taskId)
             throws SQLException {
 
-        String sql = "DELETE FROM tasks WHERE task_id = ?";
+        String sql = "DELETE FROM tasks WHERE task_id = ? AND team_id = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, taskId);
+            pstmt.setInt(2, teamId);
             return pstmt.executeUpdate() > 0;
         }
     }
+
+    private static void requireTeamMember(Connection conn, int teamId, int userId) throws SQLException {
+        String sql = "SELECT 1 FROM team_members WHERE team_id = ? AND user_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+            pstmt.setInt(2, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (!rs.next()) throw new SQLException("선택한 담당자가 현재 팀에 소속되어 있지 않습니다.");
+            }
+        }
+    }
+
 }

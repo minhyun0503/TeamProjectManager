@@ -64,7 +64,8 @@ CREATE TABLE materials (
     material_id INT AUTO_INCREMENT PRIMARY KEY,
     team_id     INT NOT NULL,
     title       VARCHAR(100) NOT NULL,
-    link_url    VARCHAR(255),
+    link_url    VARCHAR(255), -- 이전 자료 링크 보존
+    url         VARCHAR(500), -- 자료 관리 코드에서 사용하는 링크
     description TEXT,
     uploader_id INT NOT NULL,
     created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,

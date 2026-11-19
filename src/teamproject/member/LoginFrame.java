@@ -1,4 +1,8 @@
-package teamproject;
+package teamproject.member;
+
+import teamproject.resource.MainFrame;
+import teamproject.common.TeamDAO;
+import java.util.List;
 
 import java.awt.GridLayout;
 import java.sql.Connection;
@@ -66,12 +70,24 @@ public class LoginFrame extends JFrame { // 로그인 창 (JFrame을 상속)
         }
 
         try {
-            // UserDAO.login: 맞으면 이름, 틀리면 null
-            String name = UserDAO.login(conn, loginId, loginPw);
+            // 로그인한 회원 번호로 소속 팀을 조회합니다.
+            UserDAO.User user = UserDAO.login(conn, loginId, loginPw);
 
-            if (name != null) {
-                JOptionPane.showMessageDialog(this, name + "님 환영합니다!");
-                new MainFrame(conn).setVisible(true); // 대시보드·업무·팀원·자료 통합 화면 열기
+            if (user != null) {
+                List<TeamDAO.Team> teams = TeamDAO.findTeams(conn, user.getUserId());
+                if (teams.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "소속된 팀이 없습니다. 팀 등록 후 다시 로그인하세요.");
+                    return;
+                }
+                TeamDAO.Team team = teams.get(0);
+                if (teams.size() > 1) {
+                    team = (TeamDAO.Team) JOptionPane.showInputDialog(
+                            this, "관리할 팀을 선택하세요.", "팀 선택",
+                            JOptionPane.QUESTION_MESSAGE, null, teams.toArray(), team);
+                    if (team == null) return;
+                }
+                JOptionPane.showMessageDialog(this, user.getName() + "님 환영합니다!");
+                new MainFrame(conn, user, team).setVisible(true); // 대시보드·업무·팀원·자료 통합 화면 열기
                 dispose();                            // 로그인 창 닫기
             } else {
                 JOptionPane.showMessageDialog(this,

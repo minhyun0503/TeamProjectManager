@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.member;
 
 
 // Swing 화면 관련 클래스
@@ -54,8 +54,8 @@ public class MemberFrame extends JFrame {
         // 창 크기 설정
         setSize(800, 500);
 
-        // 창 닫을 때 프로그램 종료
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // 별도 창을 닫아도 통합 화면은 유지
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // 화면 중앙에 창 배치
         setLocationRelativeTo(null);
@@ -108,6 +108,10 @@ public class MemberFrame extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
         // DB에서 팀원 목록을 가져와 표에 표시
+        MemberDAO.loadMembers(conn, tableModel, teamId);
+    }
+
+    public void reload() throws SQLException {
         MemberDAO.loadMembers(conn, tableModel, teamId);
     }
 
@@ -210,7 +214,8 @@ public class MemberFrame extends JFrame {
 
         // 기존 이름, 학번, 역할 가져오기
         String oldName = tableModel.getValueAt(selectedRow, 2).toString();
-        String oldStudentNo = tableModel.getValueAt(selectedRow, 3).toString();
+        Object studentNoValue = tableModel.getValueAt(selectedRow, 3);
+        String oldStudentNo = studentNoValue == null ? "" : studentNoValue.toString();
         String oldRole = tableModel.getValueAt(selectedRow, 4).toString();
 
         // 기존 정보를 입력창에 표시할 텍스트 필드 생성
@@ -230,6 +235,8 @@ public class MemberFrame extends JFrame {
         // 이름 입력 항목 추가
         panel.add(new JLabel("이름:"));
         panel.add(nameField);
+        panel.add(new JLabel("학번:"));
+        panel.add(studentNoField);
 
         // 역할 선택 항목 추가
         panel.add(new JLabel("역할:"));
