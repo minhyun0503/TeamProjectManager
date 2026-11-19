@@ -32,38 +32,11 @@ public class MaterialDAO {
         public String getCreatedAt() { return createdAt; }
     }
 
-    // 클라우드 DB(Aiven)에 materials 테이블 및 url 컬럼 자동 보완
-    public static void createTableIfNotExist(Connection conn) {
-        String sqlCreate = """
-                CREATE TABLE IF NOT EXISTS materials (
-                    material_id INT AUTO_INCREMENT PRIMARY KEY,
-                    team_id INT NOT NULL,
-                    title VARCHAR(100) NOT NULL,
-                    description TEXT,
-                    url VARCHAR(500) NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-                """;
-        try (PreparedStatement pstmt = conn.prepareStatement(sqlCreate)) {
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            // 테이블 생성 관련 예외 무시
-        }
-
-        // 기존 materials 테이블에 url 컬럼이 없을 경우를 대비해 자동으로 추가
-        String sqlAlter = "ALTER TABLE materials ADD COLUMN url VARCHAR(500) NOT NULL";
-        try (PreparedStatement pstmt = conn.prepareStatement(sqlAlter)) {
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            // 이미 url 컬럼이 존재하는 경우 발생하는 정상 오류는 무시
-        }
-    }
-
+    // DB 구조는 db/schema.sql 및 기존 DB용 migration SQL로 준비합니다.
+    // 조회할 때마다 테이블을 생성하거나 수정하지 않습니다.
     public static void loadMaterials(Connection conn, DefaultTableModel tableModel, int teamId) throws SQLException {
-        createTableIfNotExist(conn);
-
         String sql = """
-                SELECT material_id, title, description, url, created_at
+                SELECT material_id, title, description, COALESCE(NULLIF(url, ''), link_url) AS url, created_at
                 FROM materials
                 WHERE team_id = ?
                 ORDER BY material_id DESC
@@ -89,10 +62,8 @@ public class MaterialDAO {
     }
 
     public static List<MaterialInfo> getRecentMaterials(Connection conn, int teamId, int limit) throws SQLException {
-        createTableIfNotExist(conn);
-
         String sql = """
-                SELECT material_id, title, description, url, created_at
+                SELECT material_id, title, description, COALESCE(NULLIF(url, ''), link_url) AS url, created_at
                 FROM materials
                 WHERE team_id = ?
                 ORDER BY material_id DESC
@@ -110,7 +81,7 @@ public class MaterialDAO {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("url"),
-                        rs.getTimestamp("created_at").toString()
+                        String.valueOf(rs.getTimestamp("created_at"))
                     ));
                 }
             }
@@ -118,12 +89,18 @@ public class MaterialDAO {
         return list;
     }
 
-    public static void insertMaterial(Connection conn, int teamId, String title, String description, String url) throws SQLException {
-        createTableIfNotExist(conn);
-
+    public static void insertMaterial(Connection conn, int teamId, int uploaderId, String title, String description, String url) throws SQLException {
+        try (PreparedStatement check = conn.prepareStatement(
+                "SELECT 1 FROM team_members WHERE team_id = ? AND user_id = ?")) {
+            check.setInt(1, teamId);
+            check.setInt(2, uploaderId);
+            try (ResultSet rs = check.executeQuery()) {
+                if (!rs.next()) throw new SQLException("현재 팀에 소속된 사용자만 자료를 등록할 수 있습니다.");
+            }
+        }
         String sql = """
-                INSERT INTO materials (team_id, title, description, url)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO materials (team_id, title, description, url, uploader_id)
+                VALUES (?, ?, ?, ?, ?)
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -131,14 +108,16 @@ public class MaterialDAO {
             pstmt.setString(2, title);
             pstmt.setString(3, description);
             pstmt.setString(4, url);
+            pstmt.setInt(5, uploaderId);
             pstmt.executeUpdate();
         }
     }
 
-    public static MaterialInfo findMaterial(Connection conn, int materialId) throws SQLException {
-        String sql = "SELECT title, description, url, created_at FROM materials WHERE material_id = ?";
+    public static MaterialInfo findMaterial(Connection conn, int teamId, int materialId) throws SQLException {
+        String sql = "SELECT title, description, COALESCE(NULLIF(url, ''), link_url) AS url, created_at FROM materials WHERE material_id = ? AND team_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, materialId);
+            pstmt.setInt(2, teamId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new MaterialInfo(
@@ -146,7 +125,7 @@ public class MaterialDAO {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("url"),
-                        rs.getTimestamp("created_at").toString()
+                        String.valueOf(rs.getTimestamp("created_at"))
                     );
                 }
             }
@@ -154,11 +133,11 @@ public class MaterialDAO {
         return null;
     }
 
-    public static boolean updateMaterial(Connection conn, int materialId, String title, String description, String url) throws SQLException {
+    public static boolean updateMaterial(Connection conn, int teamId, int materialId, String title, String description, String url) throws SQLException {
         String sql = """
                 UPDATE materials
                 SET title = ?, description = ?, url = ?
-                WHERE material_id = ?
+                WHERE material_id = ? AND team_id = ?
                 """;
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -166,14 +145,16 @@ public class MaterialDAO {
             pstmt.setString(2, description);
             pstmt.setString(3, url);
             pstmt.setInt(4, materialId);
+            pstmt.setInt(5, teamId);
             return pstmt.executeUpdate() > 0;
         }
     }
 
-    public static boolean deleteMaterial(Connection conn, int materialId) throws SQLException {
-        String sql = "DELETE FROM materials WHERE material_id = ?";
+    public static boolean deleteMaterial(Connection conn, int teamId, int materialId) throws SQLException {
+        String sql = "DELETE FROM materials WHERE material_id = ? AND team_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, materialId);
+            pstmt.setInt(2, teamId);
             return pstmt.executeUpdate() > 0;
         }
     }

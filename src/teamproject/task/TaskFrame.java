@@ -40,18 +40,19 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
     // [업무 관리 추가] 등록·수정·삭제 메서드에서도 DB가 필요해서 생성자에서 받은 연결을 필드에 저장
     private Connection conn;
 
-    // [업무 관리 추가] 현재 팀 번호. 지금은 MemberFrame 호출부와 같이 1번 팀으로 고정.
-    // 팀 선택 기능이 완성되면 생성자로 전달받도록 바꾼다.
-    private int teamId = 1;
+    // 로그인 후 선택한 팀 번호를 모든 조회와 저장에 사용합니다.
+    private final int teamId;
+    private InlineProgressPanel progressPanel;
 	
     // 업무 관리 화면 생성
-    public TaskFrame(Connection conn) throws SQLException{
+    public TaskFrame(Connection conn, int teamId) throws SQLException{
 
         this.conn = conn; // [업무 관리 추가] 전달받은 DB 연결 저장
+        this.teamId = teamId;
 
         setTitle("팀프로젝트 관리 프로그램"); //프로그램 창 제목 지정
         setSize(800, 500); // 창 크기 : 800x500
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //창 닫을 때 프로그램 종료
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //이 창만 닫기
         setLocationRelativeTo(null); //화면 중앙에 창 배치
 
     
@@ -79,7 +80,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
                 if (e.getClickCount() == 2) {//클릭이 2번???
                     try {
                         System.out.println("더블클릭 감지");
-                        MemberFrame frame = new MemberFrame(conn, 1);//조회된 업무현황 표를 더블 클릭 시 해당 팀원을 표시(현재는 1번팀으로만 고정값)
+                        MemberFrame frame = new MemberFrame(conn, teamId); // 현재 팀의 팀원 관리창 열기
                         frame.setVisible(true);
                     } catch (SQLException ex) {
                         ex.printStackTrace();
@@ -110,8 +111,8 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
         buttonPanel.add(completeButton);
 
         add(buttonPanel, BorderLayout.SOUTH); // 버튼 패널을 화면 아래에 배치
-        TaskDAO.loadTasks(conn, tableModel); //taskDAO클래스에서 tableModel(표)에 데이터 채워넣는 단계
-        InlineProgressPanel.attach(this, conn, tableModel, teamId); // [이*주 추가] 진행률 연결
+        reload(); //taskDAO클래스에서 tableModel(표)에 데이터 채워넣는 단계
+        progressPanel = InlineProgressPanel.attach(this, conn, tableModel, teamId); // 진행률 연결
 
         // [열 너비 추가] 표 내용이 바뀔 때마다(조회, 등록, 수정 등) 열 너비를 글자 길이에 맞춘다
         tableModel.addTableModelListener(e -> SwingUtilities.invokeLater(this::fitColumns));
@@ -149,6 +150,12 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
         }
     }
 
+    // 업무 변경 후 표와 진행률을 함께 갱신합니다.
+    public void reload() throws SQLException {
+        TaskDAO.loadTasks(conn, tableModel, teamId);
+        if (progressPanel != null) progressPanel.reload();
+    }
+
     // 표에서 선택한 업무의 번호(task_id)를 돌려준다. 선택한 행이 없으면 -1
     private int getSelectedTaskId() {
 
@@ -184,7 +191,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
             JOptionPane.showMessageDialog(this, "업무 등록 성공!");
 
             // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "업무 등록 실패: " + e.getMessage());
@@ -204,11 +211,11 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
         try {
             // 선택한 업무의 현재 내용을 DB에서 조회 (설명, 담당자 번호는 표에 없어서 따로 조회)
-            TaskDAO.TaskInfo old = TaskDAO.findTask(conn, taskId);
+            TaskDAO.TaskInfo old = TaskDAO.findTask(conn, teamId, taskId);
 
             if (old == null) {
                 JOptionPane.showMessageDialog(this, "이미 삭제된 업무입니다.");
-                TaskDAO.loadTasks(conn, tableModel);
+                reload();
                 return;
             }
 
@@ -221,7 +228,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
             // DAO를 호출하여 DB 정보 수정
             boolean updated = TaskDAO.updateTask(
-                    conn, taskId,
+                    conn, teamId, taskId,
                     input.getTitle(), input.getDescription(),
                     input.getAssigneeId(), input.getStatus(), input.getDueDate()
             );
@@ -233,7 +240,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
             }
 
             // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "업무 수정 실패: " + e.getMessage());
@@ -266,12 +273,11 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
         try {
             // DB에서 업무 삭제
-            TaskDAO.deleteTask(conn, taskId);
-
-            JOptionPane.showMessageDialog(this, "업무가 삭제되었습니다.");
+            boolean deleted = TaskDAO.deleteTask(conn, teamId, taskId);
+            JOptionPane.showMessageDialog(this, deleted ? "업무가 삭제되었습니다." : "이미 삭제된 업무입니다.");
 
             // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "삭제 오류: " + e.getMessage());
@@ -290,12 +296,11 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
         try {
             // 상태 컬럼만 '완료'로 변경
-            TaskDAO.updateTaskStatus(conn, taskId, TaskDAO.STATUS_DONE);
-
-            JOptionPane.showMessageDialog(this, "완료 처리되었습니다.");
+            boolean updated = TaskDAO.updateTaskStatus(conn, teamId, taskId, TaskDAO.STATUS_DONE);
+            JOptionPane.showMessageDialog(this, updated ? "완료 처리되었습니다." : "이미 삭제된 업무입니다.");
 
             // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "완료 처리 오류: " + e.getMessage());

@@ -40,7 +40,7 @@
 	        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 	            // ? 자리에 조회할 팀 번호 입력
-	            pstmt.setInt(1, teamId); //1번으로 고정(수정필요!!)
+	            pstmt.setInt(1, teamId); // 첫 번째 ?에 전달받은 팀 번호 설정
 
 	            // SQL 실행 후 조회 결과 저장
 	            try (ResultSet rs = pstmt.executeQuery()) {
@@ -158,6 +158,16 @@
             String name,
             String studentNo,
             String role) throws SQLException {
+
+        // 현재 팀 소속인지 먼저 확인해 다른 팀 사용자가 수정되지 않게 합니다.
+        try (PreparedStatement check = conn.prepareStatement(
+                "SELECT 1 FROM team_members WHERE team_id = ? AND user_id = ?")) {
+            check.setInt(1, teamId);
+            check.setInt(2, userId);
+            try (ResultSet rs = check.executeQuery()) {
+                if (!rs.next()) throw new SQLException("현재 팀에 소속되지 않은 사용자입니다.");
+            }
+        }
 
         // users 테이블의 이름과 학번을 수정하는 SQL
         String userSql = """

@@ -44,12 +44,6 @@ public class Main {
 
               new LoginFrame(conn).setVisible(true); // 로그인 창 띄우기
               
-           // 업무 관리 화면 생성
-              /*TaskFrame frame = new TaskFrame(conn);
-
-              // 업무 관리 창 띄우기
-              frame.setVisible(true);*/
-
           } catch (SQLException e) { // 연결 실패 시
               JOptionPane.showMessageDialog(null,
                       "MySQL 연결 실패: " + e.getMessage(),

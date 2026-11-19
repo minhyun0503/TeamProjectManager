@@ -23,12 +23,14 @@ public class MaterialPanel extends JPanel {
 
     private Connection conn;
     private int teamId;
+    private final int userId;
     private JTable materialTable;
     private DefaultTableModel tableModel;
 
-    public MaterialPanel(Connection conn, int teamId) {
+    public MaterialPanel(Connection conn, int teamId, int userId) {
         this.conn = conn;
         this.teamId = teamId;
+        this.userId = userId;
 
         setLayout(new BorderLayout(5, 5));
 
@@ -93,7 +95,7 @@ public class MaterialPanel extends JPanel {
         if (input == null) return;
 
         try {
-            MaterialDAO.insertMaterial(conn, teamId, input.getTitle(), input.getDescription(), input.getUrl());
+            MaterialDAO.insertMaterial(conn, teamId, userId, input.getTitle(), input.getDescription(), input.getUrl());
             JOptionPane.showMessageDialog(this, "자료가 등록되었습니다.");
             reload();
         } catch (SQLException e) {
@@ -109,7 +111,7 @@ public class MaterialPanel extends JPanel {
         }
 
         try {
-            MaterialDAO.MaterialInfo old = MaterialDAO.findMaterial(conn, materialId);
+            MaterialDAO.MaterialInfo old = MaterialDAO.findMaterial(conn, teamId, materialId);
             if (old == null) {
                 JOptionPane.showMessageDialog(this, "존재하지 않는 자료입니다.");
                 reload();
@@ -119,7 +121,7 @@ public class MaterialPanel extends JPanel {
             MaterialDAO.MaterialInfo input = showMaterialDialog("자료 수정", old);
             if (input == null) return;
 
-            boolean updated = MaterialDAO.updateMaterial(conn, materialId, input.getTitle(), input.getDescription(), input.getUrl());
+            boolean updated = MaterialDAO.updateMaterial(conn, teamId, materialId, input.getTitle(), input.getDescription(), input.getUrl());
             if (updated) {
                 JOptionPane.showMessageDialog(this, "자료가 수정되었습니다.");
             } else {
@@ -143,8 +145,8 @@ public class MaterialPanel extends JPanel {
         if (confirm != JOptionPane.YES_OPTION) return;
 
         try {
-            MaterialDAO.deleteMaterial(conn, materialId);
-            JOptionPane.showMessageDialog(this, "자료가 삭제되었습니다.");
+            boolean deleted = MaterialDAO.deleteMaterial(conn, teamId, materialId);
+            JOptionPane.showMessageDialog(this, deleted ? "자료가 삭제되었습니다." : "이미 삭제된 자료입니다.");
             reload();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "자료 삭제 실패: " + e.getMessage());
@@ -158,7 +160,8 @@ public class MaterialPanel extends JPanel {
             return;
         }
 
-        String url = tableModel.getValueAt(row, 3).toString();
+        Object urlValue = tableModel.getValueAt(row, 3);
+        String url = urlValue == null ? null : urlValue.toString();
         if (url == null || url.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "유효한 URL이 없습니다.");
             return;
@@ -214,6 +217,10 @@ public class MaterialPanel extends JPanel {
 
             if (inputTitle.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "자료명을 입력하세요.");
+                continue;
+            }
+            if (inputTitle.length() > 100 || inputUrl.length() > 500) {
+                JOptionPane.showMessageDialog(this, "자료명은 100자, 링크는 500자 이하로 입력하세요.");
                 continue;
             }
             if (inputUrl.isEmpty()) {

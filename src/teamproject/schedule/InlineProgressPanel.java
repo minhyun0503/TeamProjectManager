@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
 
 // [이*주 담당 3] 계산한 값을 기존 업무 화면에 보여줍니다.
 // ActionListener: 버튼 클릭과 이름 선택을 처리합니다.
-// 업무 변경 후에는 새로고침 버튼을 눌러 진행률과 마감 안내를 갱신합니다.
+// 업무 변경 시 진행률과 마감 안내를 갱신하며, 다른 PC의 변경은 새로고침으로 확인합니다.
 public class InlineProgressPanel extends JPanel
         implements ActionListener {
 
@@ -39,14 +39,15 @@ public class InlineProgressPanel extends JPanel
     // 이름 목록을 채우는 동안 이름 선택 이벤트가 실행되지 않게 하는 표시입니다.
     private boolean updating = false;
 
-    // 팀원 TaskFrame 생성자의 첫 TaskDAO.loadTasks(conn, tableModel); 바로 아래에
+    // 팀원 TaskFrame 생성자의 첫 업무 조회 바로 아래에
     // InlineProgressPanel.attach(this, conn, tableModel, teamId); 를 한 번 추가합니다.
     // 아래 메서드는 기존 업무 화면 위에 내 패널을 붙이는 역할입니다.
-    public static void attach(JFrame frame, Connection conn,
+    public static InlineProgressPanel attach(JFrame frame, Connection conn,
             DefaultTableModel taskModel, int teamId) {
         InlineProgressPanel panel = new InlineProgressPanel(conn, taskModel, teamId);
         frame.add(panel, BorderLayout.NORTH);
         frame.revalidate();
+        return panel;
     }
 
     public InlineProgressPanel(Connection conn, DefaultTableModel taskModel, int teamId) {
@@ -100,7 +101,7 @@ public class InlineProgressPanel extends JPanel
             try {
                 // 기존 업무 조회 함수를 그대로 사용합니다.
                 // 업무 표를 채운 다음 내 진행률과 마감 안내도 다시 계산합니다.
-                TaskDAO.loadTasks(conn, taskModel);
+                TaskDAO.loadTasks(conn, taskModel, teamId);
                 reload();
             } catch (SQLException ex) {
                 notice.setText("조회 실패 · 기존 값은 최신이 아닐 수 있음");
@@ -110,7 +111,7 @@ public class InlineProgressPanel extends JPanel
     }
 
     // DB에서 최신 업무를 읽고, 이름 목록과 진행률을 다시 표시합니다.
-    private void reload() {
+    public void reload() {
         updating = true;
         try {
             int selectedId = -1;
@@ -165,7 +166,7 @@ public class InlineProgressPanel extends JPanel
             }
         }
         notice.setText(teamId + "번 팀 · 오늘 마감 " + todayCount + "개 / 지연 "
-                + lateCount + "개   |   업무 변경 후 새로고침을 눌러 주세요");
+                + lateCount + "개   |   다른 PC의 변경은 새로고침으로 확인하세요");
     }
 
     private void setBar(JProgressBar bar, int userId) {
