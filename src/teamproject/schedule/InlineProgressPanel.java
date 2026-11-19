@@ -1,4 +1,6 @@
-package teamproject;
+package teamproject.schedule;
+
+import teamproject.task.TaskDAO;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

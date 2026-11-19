@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.schedule;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

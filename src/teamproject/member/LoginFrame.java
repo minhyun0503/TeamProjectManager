@@ -1,4 +1,6 @@
-package teamproject;
+package teamproject.member;
+
+import teamproject.resource.MainFrame;
 
 import java.awt.GridLayout;
 import java.sql.Connection;

@@ -1,4 +1,7 @@
-package teamproject;
+package teamproject.resource;
+
+import teamproject.member.MemberFrame;
+import teamproject.task.TaskFrame;
 
 import java.awt.BorderLayout;
 import java.sql.Connection;

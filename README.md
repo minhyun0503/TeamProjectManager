@@ -15,7 +15,7 @@
 2. Eclipse에서 프로젝트를 가져옵니다. (`File` → `Import` → `Existing Projects into Workspace` → 클론한 폴더 선택)
 3. MySQL Connector/J(JDBC 드라이버)는 `lib` 폴더에 포함되어 있어서 따로 추가할 필요가 없습니다.
    - 빨간 오류가 보이면 프로젝트 우클릭 → `Refresh`(F5) 후 `Project` → `Clean`을 해보세요.
-4. `src/teamproject/Main.java`를 실행하고, 비밀번호 창에 DB 비밀번호를 입력합니다.
+4. `src/teamproject/common/Main.java`를 실행하고, 비밀번호 창에 DB 비밀번호를 입력합니다.
    - DB 비밀번호는 공개 저장소에 기록하지 말고 팀 내부의 안전한 경로로 공유합니다.
 
 ※ Aiven 무료 서비스는 오래 사용하지 않으면 자동으로 꺼질 수 있습니다. 연결이 안 되면 팀장에게 알려주세요. (발표 전 Running 상태 확인)
@@ -46,36 +46,30 @@ DB 비밀번호(접속용)와 위 로그인 비밀번호는 서로 다른 것입
 - 진행률은 별도 표 없이 tasks의 완료 개수 / 전체 개수로 계산합니다.
 - `db/schema.sql`은 DB 구조 참고용입니다. (클라우드에 이미 반영되어 있으니 다시 실행하지 마세요.)
 
-## 파일 구조
-```
-TeamProjectManager/
-├── src/
-│   ├── module-info.java
-│   └── teamproject/
-│       ├── Main.java            프로그램 시작, DB 비밀번호 입력, 연결 후 로그인 창 실행
-│       ├── LoginFrame.java      로그인 화면 (성공하면 통합 화면으로 이동)
-│       ├── MainFrame.java       대시보드·업무·팀원·자료 관리 탭을 담는 통합 화면
-│       ├── DashboardPanel.java  팀 진행률, 업무 목록, 최근 자료 5건 표시
-│       ├── MaterialDAO.java     자료 조회·등록·수정·삭제, 최근 자료 조회
-│       ├── MaterialPanel.java   자료 관리 화면과 URL 링크 열기
-│       ├── DB_connection.java   클라우드 MySQL 연결
-│       ├── UserDAO.java         users 표 처리 (로그인 확인)
-│       ├── TaskDAO.java         업무 조회·등록·수정·삭제·상태 변경, 담당자 조회
-│       ├── TaskFrame.java       업무 화면, 관리 버튼, 표 열 너비 자동 조절
-│       ├── MemberDAO.java       팀원 조회·등록·수정·팀 소속 삭제
-│       ├── MemberFrame.java     팀원 관리 화면
-│       ├── InlineProgressDAO.java    진행률 계산용 팀원·업무 조회
-│       ├── InlineProgressData.java   진행률·마감 안내 계산
-│       └── InlineProgressPanel.java  전체·개인 진행률과 마감 안내 표시
-├── lib/
-│   └── mysql-connector-j-26.10.0.jar   MySQL JDBC 드라이버
-├── db/
-│   └── schema.sql               DB 생성 SQL (참고용)
-└── README.md
-```
+## 파일 구조와 담당 패키지
+
+조원별 담당 기능을 기준으로 5개 패키지로 나눴습니다. 각 패키지에는 해당 기능의 화면과 DAO를 함께 둡니다.
+
+| 담당 | 패키지 | 파일 |
+|---|---|---|
+| 장*민 — DB 및 공통 시스템 | `teamproject.common` | `Main.java`, `DB_connection.java` |
+| 이*찬 — 로그인 및 팀원 관리 | `teamproject.member` | `LoginFrame.java`, `UserDAO.java`, `MemberDAO.java`, `MemberFrame.java` |
+| 윤*훈 — 업무 관리 | `teamproject.task` | `TaskDAO.java`, `TaskFrame.java` |
+| 이*주 — 일정 및 진행률 | `teamproject.schedule` | `InlineProgressDAO.java`, `InlineProgressData.java`, `InlineProgressPanel.java` |
+| 신*준 — 자료 및 대시보드 | `teamproject.resource` | `MainFrame.java`, `DashboardPanel.java`, `MaterialDAO.java`, `MaterialPanel.java` |
+
+- 자바 파일은 `src/teamproject/` 아래의 담당 패키지 폴더에 있습니다. 파일 맨 위의 `package` 선언은 폴더 이름과 일치해야 합니다.
+- `MainFrame`은 자료·대시보드 원본에 포함된 통합 화면이므로 같은 담당자의 `resource` 패키지에 둡니다.
+- DB 설계 참고 파일은 `db/schema.sql`, JDBC 드라이버는 `lib/mysql-connector-j-26.10.0.jar`, 모듈 설정은 `src/module-info.java`에 있습니다.
+- 다른 담당자의 클래스를 사용할 때는 `import`를 추가합니다. 예: 업무 화면에서 진행률 패널을 사용하려면 `import teamproject.schedule.InlineProgressPanel;`을 씁니다.
+- `schedule` 패키지는 현재 진행률·마감 안내를 담당합니다. 일정 등록·수정·삭제는 아직 구현되지 않았습니다.
+
+시작 클래스는 **`teamproject.common.Main`**입니다. Eclipse에서 `src/teamproject/common/Main.java`를 우클릭한 뒤 `Run As` → `Java Application`으로 실행합니다.
 
 ## 로그인 사용법 (화면 담당자용)
 ```java
+import teamproject.member.UserDAO;
+
 // 아이디/비밀번호가 맞으면 이름, 틀리면 null 반환
 String name = UserDAO.login(conn, loginId, password);
 ```

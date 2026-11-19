@@ -1,4 +1,4 @@
-	package teamproject;
+	package teamproject.member;
 
 	// 데이터베이스 관련 클래스
 	import java.sql.Connection;

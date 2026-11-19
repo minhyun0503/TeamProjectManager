@@ -1,4 +1,6 @@
-package teamproject;
+package teamproject.common;
+
+import teamproject.member.LoginFrame;
 
 import java.sql.Connection; //DB연결을 나타내는 인터페이스
 import java.sql.DriverManager; 

@@ -1,4 +1,7 @@
-package teamproject;
+package teamproject.task;
+
+import teamproject.member.MemberFrame;
+import teamproject.schedule.InlineProgressPanel;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
