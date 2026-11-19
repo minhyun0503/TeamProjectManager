@@ -4,7 +4,7 @@
 
 ## 바로 실행
 
-1. JDK 25를 설치하고 `java -version`, `javac -version`으로 확인합니다.
+1. **Eclipse IDE 2023-12 + Java 17 기준**입니다. JDK 17 또는 21을 사용하고 `java -version`, `javac -version`으로 확인합니다. 프로젝트의 소스·출력 버전은 17로 고정했습니다.
 2. Windows에서는 `run.bat`, macOS/Linux에서는 `sh run.sh`를 실행합니다.
 3. **로컬 데모**를 선택합니다. 인터넷이나 MySQL 서버 없이 실행됩니다.
 4. 아이디 `demo1`~`demo5`, 비밀번호 `demo1234`로 로그인합니다.
@@ -12,7 +12,7 @@
 
 데모 DB는 사용자 홈의 `.teamproject-feedback/demo.mv.db`에 저장됩니다. 프로그램을 다시 열어도 데이터가 유지됩니다. 모든 창을 종료하고 이 데모 파일을 별도로 옮기면 새 데모 DB로 다시 시작할 수 있습니다. 원래 Aiven DB에는 연결하지 않습니다.
 
-Eclipse: `Import → Existing Projects into Workspace → feedback-version`을 선택하고 `src/teamproject/common/Main.java`를 실행하세요. 프로젝트 이름은 `TeamProjectManagerFeedback`입니다. `schema.sql`도 빌드 출력 폴더로 복사되어야 합니다. 제공한 build 스크립트는 이 작업을 수행합니다.
+Eclipse: `Import → Existing Projects into Workspace → feedback-version`을 선택하고 `src/teamproject/common/Main.java`를 실행하세요. 프로젝트 이름은 `TeamProjectManagerFeedback`입니다. 프로젝트 설정에 `JavaSE-17`, Compiler 17, UTF-8을 포함했습니다. JRE 오류가 있으면 [Eclipse 2023-12 설정 안내](docs/09_eclipse_2023_12.md)를 참고하세요. `schema.sql`도 빌드 출력 폴더로 복사되어야 합니다. 제공한 build 스크립트는 이 작업을 수행합니다.
 
 MySQL로 여러 PC에서 사용할 때는 새 전용 DB에 `db/mysql_demo.sql`을 한 번 실행한 뒤, 시작 화면에서 DB 주소·사용자·비밀번호를 입력합니다. SQL 스크립트가 스키마와 가상 계정 demo1~demo5를 준비합니다. 시작 코드 자체는 MySQL에 계정을 자동 생성하지 않습니다. 원본 DB `team_project`를 그대로 사용하는 방식은 제공하지 않습니다. MySQL 실서버 연결은 이 작업 환경에서 검증하지 않았습니다.
 
@@ -57,7 +57,7 @@ HTML 파일은 다운로드한 프로젝트에서 열면 오프라인으로 볼 
 
 - `test.bat` 또는 `sh test.sh`: H2 MySQL 호환 모드 회귀 검사 **52개**.
 - `tests/GuiSmokeTest.java`: 디스플레이 환경에서 9개 탭과 다른 연결의 메모·아이디어 자동 갱신을 검사하고 스크린샷을 저장합니다. 일반 회귀 검사와 별도로 실행합니다.
-- Java 25 소스·타깃 전체 컴파일 확인. GUI·회귀 검사를 실제 JDK 25에서도 실행했습니다. Java 21 타깃에서도 DAO 검사를 실행했습니다.
+- Java 17 소스·타깃으로 전체 컴파일하고 실제 JDK 17에서 회귀·화면·시작 흐름을 검증했습니다. Java 25를 요구하지 않습니다.
 - `tests/StartupSmokeTest.java`: 실제 Main의 모드 선택→파일 DB 준비→로그인→팀 선택→통합 화면을 검사합니다.
 - 실제 MySQL 서버·두 대의 물리 PC 연결은 별도 확인 대상입니다. 두 JDBC 연결의 버전 충돌과 화면 자동 갱신을 로컬 환경에서 검증합니다.
 - JDBC 드라이버: `lib/mysql-connector-j-26.10.0.jar`(기존 포함본), `lib/h2-2.4.240.jar`(데모·테스트). 드라이버의 배포 고지는 각 JAR의 META-INF 및 [의존성 안내](docs/dependencies.md)를 참고하세요.

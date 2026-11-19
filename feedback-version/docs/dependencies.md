@@ -2,7 +2,7 @@
 
 | 구성 | 출처 | 용도 |
 |---|---|---|
-| JDK25 | 사용자가 설치하는 JDK | 컴파일·Swing·JDBC·날짜·파일 API |
+| JDK17 또는 21 (프로젝트 기준 17) | 사용자가 설치하는 JDK | 컴파일·Swing·JDBC·날짜·파일 API |
 | MySQL Connector/J26.10.0 | 저장소의 기존 lib 포함본 | MySQL 연결 |
 | H22.4.240 | https://repo.maven.apache.org/maven2/com/h2database/h2/2.4.240/h2-2.4.240.jar | 로컬 데모·회귀 테스트 |
 
