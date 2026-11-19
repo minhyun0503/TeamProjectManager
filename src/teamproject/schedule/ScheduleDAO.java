@@ -50,6 +50,49 @@ public class ScheduleDAO {
     return rows;
   }
 
+  // 업무를 일정 표에 복사하지 않고, 이번 달의 마감일을 직접 읽습니다.
+  public static class Deadline {
+    public final int taskId;
+    public final String title, assignee, status;
+    public final LocalDate due;
+
+    public Deadline(int taskId, String title, String assignee, String status, LocalDate due) {
+      this.taskId = taskId;
+      this.title = title;
+      this.assignee = assignee;
+      this.status = status;
+      this.due = due;
+    }
+  }
+
+  public static List<Deadline> listDeadlines(Connection conn, int teamId, YearMonth month)
+      throws SQLException {
+    List<Deadline> rows = new ArrayList<>();
+    String sql =
+        """
+        SELECT t.task_id, t.title, COALESCE(u.name, '담당자 없음') AS assignee, t.status, t.due_date
+        FROM tasks t LEFT JOIN users u ON t.assignee_id = u.user_id
+        WHERE t.team_id = ? AND t.due_date >= ? AND t.due_date <= ?
+        ORDER BY t.due_date, t.task_id
+        """;
+    try (PreparedStatement p = conn.prepareStatement(sql)) {
+      p.setInt(1, teamId);
+      p.setDate(2, Date.valueOf(month.atDay(1)));
+      p.setDate(3, Date.valueOf(month.atEndOfMonth()));
+      try (ResultSet r = p.executeQuery()) {
+        while (r.next())
+          rows.add(
+              new Deadline(
+                  r.getInt("task_id"),
+                  r.getString("title"),
+                  r.getString("assignee"),
+                  r.getString("status"),
+                  r.getDate("due_date").toLocalDate()));
+      }
+    }
+    return rows;
+  }
+
   public static boolean save(
       Connection conn,
       int teamId,

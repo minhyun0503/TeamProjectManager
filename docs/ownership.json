@@ -264,12 +264,12 @@
       },
       {
         "method": "doInBackground",
-        "line": 88,
+        "line": 87,
         "explanation": "백그라운드에서 DB 연결·조회만 수행합니다."
       },
       {
         "method": "done",
-        "line": 94,
+        "line": 93,
         "explanation": "배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다."
       },
       {
@@ -559,7 +559,7 @@
       },
       {
         "method": "addInputRow",
-        "line": 446,
+        "line": 452,
         "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
       }
     ]
@@ -728,13 +728,23 @@
         "explanation": "현재 팀 목록을 SQL로 조회하여 DTO 목록을 만듭니다."
       },
       {
+        "method": "Deadline",
+        "line": 59,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "listDeadlines",
+        "line": 68,
+        "explanation": "현재 팀·표시 월의 업무 마감일을 원본 업무 표에서 읽습니다."
+      },
+      {
         "method": "save",
-        "line": 53,
+        "line": 96,
         "explanation": "입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다."
       },
       {
         "method": "delete",
-        "line": 94,
+        "line": 137,
         "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
       }
     ]
@@ -747,32 +757,37 @@
     "methods": [
       {
         "method": "isCellEditable",
-        "line": 25,
+        "line": 26,
         "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
       },
       {
         "method": "SchedulePanel",
-        "line": 31,
+        "line": 32,
         "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
       },
       {
         "method": "reload",
-        "line": 84,
+        "line": 88,
         "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
       },
       {
+        "method": "dayText",
+        "line": 122,
+        "explanation": "해당 날짜의 별도 일정과 업무 마감일을 구분해 표시할 글자를 만듭니다."
+      },
+      {
         "method": "selected",
-        "line": 116,
+        "line": 145,
         "explanation": "선택 항목을 반환하고 없으면 안내합니다."
       },
       {
         "method": "edit",
-        "line": 125,
+        "line": 154,
         "explanation": "입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다."
       },
       {
         "method": "delete",
-        "line": 161,
+        "line": 190,
         "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
       }
     ]
@@ -922,12 +937,12 @@
       },
       {
         "method": "doInBackground",
-        "line": 103,
+        "line": 102,
         "explanation": "백그라운드에서 DB 연결·조회만 수행합니다."
       },
       {
         "method": "done",
-        "line": 109,
+        "line": 108,
         "explanation": "배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다."
       },
       {

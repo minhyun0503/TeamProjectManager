@@ -98,7 +98,6 @@ public class IdeaPanel extends JPanel {
   public void reload() {
     if (loading) return;
     loading = true;
-    int selectedId = list.getSelectedValue() == null ? -1 : list.getSelectedValue().id;
     new SwingWorker<List<IdeaDAO.Idea>, Void>() {
       protected List<IdeaDAO.Idea> doInBackground() throws Exception {
         try (Connection read = DB_connection.open()) {
@@ -110,6 +109,7 @@ public class IdeaPanel extends JPanel {
         try {
           List<IdeaDAO.Idea> ideas = get();
           if (!isDisplayable()) return;
+          int selectedId = list.getSelectedValue() == null ? -1 : list.getSelectedValue().id;
           model.clear();
           for (IdeaDAO.Idea idea : ideas) {
             model.addElement(idea);

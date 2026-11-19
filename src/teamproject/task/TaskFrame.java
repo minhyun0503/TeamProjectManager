@@ -362,6 +362,8 @@ public class TaskFrame extends JFrame { // 업무 관리 화면(GUI) 담당 클�
       dueField.setText(old.getDueDate().toString()); // yyyy-MM-dd 형식으로 표시
       statusBox.setSelectedItem(old.getStatus());
 
+      // 기존 담당자가 팀에서 나갔다면 임의의 다른 사람을 선택하지 않습니다.
+      assigneeBox.setSelectedIndex(-1);
       // 콤보박스 항목 중 회원 번호가 같은 팀원을 찾아 선택 상태로 만든다
       for (TaskDAO.Assignee a : members) {
         if (a.getUserId() == old.getAssigneeId()) {
@@ -431,6 +433,10 @@ public class TaskFrame extends JFrame { // 업무 관리 화면(GUI) 담당 클�
 
       // 모든 검사를 통과하면 입력한 내용을 TaskInfo로 묶어서 반환
       TaskDAO.Assignee assignee = (TaskDAO.Assignee) assigneeBox.getSelectedItem();
+      if (assignee == null) {
+        JOptionPane.showMessageDialog(this, "담당자를 선택하세요. 기존 담당자가 팀에서 나갔다면 새 담당자를 지정해야 합니다.");
+        continue;
+      }
 
       return new TaskDAO.TaskInfo(
           old == null ? 0 : old.getTaskId(),

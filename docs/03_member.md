@@ -58,7 +58,7 @@ WHERE note_id=? AND team_id=? AND version=?
 
 ## 자동 갱신 알고리즘
 
-`Timer(3000)` → 탭이 보이는지 검사 → reload → loading이면 건너뜀 → SwingWorker.doInBackground → 별도 Connection으로 NoteDAO.list → done → 목록 교체·이전 선택 ID 복원 → loading=false.
+`Timer(3000)` → 탭이 보이는지 검사 → reload → loading이면 건너뜀 → SwingWorker.doInBackground → 별도 Connection으로 NoteDAO.list → done → 목록 교체·조회가 끝난 순간의 선택 ID 복원 → loading=false.
 
 메서드별 역할:
 

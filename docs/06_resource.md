@@ -56,7 +56,7 @@ reload는 InlineProgressDAO의 계산 데이터를 받아 전체 진행률, 오�
 
 왼쪽은 아이디어 카드 JList, 오른쪽은 내용과 댓글, 아래는 댓글 입력입니다. list 선택 이벤트가 showDetail을 호출합니다. 내 글 수정은 UI와 DAO에서 모두 작성자 조건을 확인합니다. 댓글 등록 성공 후에만 입력칸을 비우므로 오류가 나면 입력을 잃지 않습니다.
 
-5초 Timer가 목록을 갱신합니다. SQL은 별도 Connection의 SwingWorker에서 실행하고 done에서 모델을 바꿉니다. 이전 선택 id를 기억하므로 갱신 후 같은 게시물을 다시 선택합니다. 댓글 입력 JTextField는 목록 갱신에서 바꾸지 않습니다. 선택한 게시물의 댓글은 showDetail에서 현재 내용으로 읽습니다.
+5초 Timer가 목록을 갱신합니다. SQL은 별도 Connection의 SwingWorker에서 실행하고 done에서 모델을 바꿉니다. 조회가 끝난 순간에 선택된 id를 기억하므로, 조회 도중 다른 글을 선택해도 그 새 선택을 유지합니다. 댓글 입력 JTextField는 목록 갱신에서 바꾸지 않습니다. 선택한 게시물의 댓글은 showDetail에서 현재 내용으로 읽습니다.
 
 IdeaCardRenderer는 제목·작성자·댓글/공감 수를 JLabel3개에 넣어 작은 카드로 보여줍니다. 역할은 시각적 표현뿐이며, 데이터 저장은 하지 않습니다. ListCellRenderer 인터페이스는 JList가 카드 모양을 요청하는 약속입니다.
 

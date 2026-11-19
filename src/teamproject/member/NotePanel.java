@@ -83,7 +83,6 @@ public class NotePanel extends JPanel {
   public void reload() {
     if (loading) return;
     loading = true;
-    int selectedId = list.getSelectedValue() == null ? -1 : list.getSelectedValue().id;
     new SwingWorker<List<NoteDAO.Note>, Void>() {
       protected List<NoteDAO.Note> doInBackground() throws Exception {
         try (Connection read = DB_connection.open()) {
@@ -95,6 +94,7 @@ public class NotePanel extends JPanel {
         try {
           List<NoteDAO.Note> notes = get();
           if (!isDisplayable()) return;
+          int selectedId = list.getSelectedValue() == null ? -1 : list.getSelectedValue().id;
           model.clear();
           for (NoteDAO.Note n : notes) {
             model.addElement(n);

@@ -18,6 +18,7 @@ public class SchedulePanel extends JPanel {
   private final int teamId, userId;
   private YearMonth month = YearMonth.now();
   private List<ScheduleDAO.Schedule> schedules = new ArrayList<>();
+  private List<ScheduleDAO.Deadline> deadlines = new ArrayList<>();
   private final JLabel monthLabel = new JLabel();
   private final JPanel calendar = new JPanel(new GridLayout(0, 7, 3, 3));
   private final DefaultTableModel model =
@@ -59,7 +60,10 @@ public class SchedulePanel extends JPanel {
     buttons.add(add);
     buttons.add(edit);
     buttons.add(delete);
-    add(buttons, BorderLayout.SOUTH);
+    JPanel bottom = new JPanel(new BorderLayout());
+    bottom.add(new JLabel("[일정] 별도 일정 · [업무] 마감일 표시 (업무 수정은 업무 관리에서)"), BorderLayout.NORTH);
+    bottom.add(buttons, BorderLayout.SOUTH);
+    add(bottom, BorderLayout.SOUTH);
     prev.addActionListener(
         e -> {
           month = month.minusMonths(1);
@@ -83,7 +87,11 @@ public class SchedulePanel extends JPanel {
 
   public void reload() {
     try {
-      schedules = ScheduleDAO.list(conn, teamId, month);
+      // 두 조회가 모두 성공했을 때에만 화면의 데이터를 교체합니다.
+      List<ScheduleDAO.Schedule> nextSchedules = ScheduleDAO.list(conn, teamId, month);
+      List<ScheduleDAO.Deadline> nextDeadlines = ScheduleDAO.listDeadlines(conn, teamId, month);
+      schedules = nextSchedules;
+      deadlines = nextDeadlines;
       monthLabel.setText(month.toString());
       model.setRowCount(0);
       calendar.removeAll();
@@ -92,10 +100,7 @@ public class SchedulePanel extends JPanel {
       for (int i = 0; i < offset; i++) calendar.add(new JLabel(""));
       for (int day = 1; day <= month.lengthOfMonth(); day++) {
         LocalDate date = month.atDay(day);
-        StringBuilder content = new StringBuilder(day + "일");
-        for (ScheduleDAO.Schedule s : schedules)
-          if (!date.isBefore(s.start) && !date.isAfter(s.end)) content.append("\n").append(s.title);
-        JTextArea cell = new JTextArea(content.toString());
+        JTextArea cell = new JTextArea(dayText(date, schedules, deadlines));
         cell.setEditable(false);
         cell.setLineWrap(true);
         cell.setWrapStyleWord(true);
@@ -111,6 +116,30 @@ public class SchedulePanel extends JPanel {
     } catch (Exception e) {
       JOptionPane.showMessageDialog(this, e.getMessage());
     }
+  }
+
+  // 날짜 한 칸에 들어갈 글자를 만듭니다. 조회와 화면 표시를 나눠 검사하기 쉽습니다.
+  public static String dayText(
+      LocalDate date, List<ScheduleDAO.Schedule> schedules, List<ScheduleDAO.Deadline> deadlines) {
+    StringBuilder content = new StringBuilder(date.getDayOfMonth() + "일");
+    for (ScheduleDAO.Schedule s : schedules) {
+      if (!date.isBefore(s.start) && !date.isAfter(s.end)) {
+        content.append("\n[일정] ").append(s.title);
+      }
+    }
+    for (ScheduleDAO.Deadline task : deadlines) {
+      if (date.equals(task.due)) {
+        content
+            .append("\n[업무] ")
+            .append(task.title)
+            .append(" (")
+            .append(task.status)
+            .append(" · ")
+            .append(task.assignee)
+            .append(")");
+      }
+    }
+    return content.toString();
   }
 
   private ScheduleDAO.Schedule selected() {

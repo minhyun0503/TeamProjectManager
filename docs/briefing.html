@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>팀프로젝트 코드 브리핑 교재</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f8fafc;color:#172033;font:17px/1.85 system-ui,-apple-system,"Malgun Gothic",sans-serif}aside{position:fixed;inset:0 auto 0 0;width:250px;background:#12233b;color:white;padding:28px 20px;overflow:auto}aside h2{font-size:20px}aside a{display:block;color:#cbd5e1;text-decoration:none;padding:9px 0;font-size:14px}main{margin-left:250px;max-width:1250px;padding:45px 55px}header{background:#fff;border-top:5px solid #2563eb;padding:30px;border-radius:12px}header h1{margin:0;font-size:30px}section{background:white;margin:30px 0;padding:30px;border:1px solid #e2e8f0;border-radius:12px;scroll-margin-top:20px}h1{font-size:28px}h2{font-size:23px;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin-top:36px}h3{font-size:20px}a{color:#1d4ed8}table{width:100%;border-collapse:collapse;font-size:15px;margin:20px 0}th,td{border:1px solid #dbe2ea;padding:10px;text-align:left;vertical-align:top}th{background:#edf4ff}pre{overflow:auto;background:#132236;color:#ecf4ff;padding:18px;border-radius:8px;font-size:14px;line-height:1.7}code{font-size:.9em}button{border:0;border-radius:7px;background:#2563eb;color:white;padding:12px 18px;cursor:pointer}.badge{display:inline-block;padding:5px 10px;background:#e0f2fe;color:#075985;border-radius:15px;margin-right:8px;font-size:14px}img{max-width:100%}.note{background:#eff6ff;padding:16px;border-left:4px solid #3b82f6}@media(max-width:850px){aside{position:static;width:auto}aside a{display:inline-block;margin-right:15px}main{margin:0;padding:18px}section{padding:18px}table{font-size:13px}}@media print{aside,button{display:none}main{margin:0;padding:0;max-width:none}section{break-before:page;border:0;padding:0}pre{white-space:pre-wrap;color:#111;background:#f1f5f9}a{color:inherit;text-decoration:none}body{font-size:11pt}h1{font-size:20pt}}</style></head><body><aside><h2>팀프로젝트<br>코드 브리핑</h2><p>기존 기반 + 피드백 반영</p><a href="#start">00_reading_order</a><a href="#eclipse">09_eclipse_2023_12</a><a href="#flow">01_whole_flow</a><a href="#common">02_common</a><a href="#member">03_member</a><a href="#task">04_task</a><a href="#schedule">05_schedule</a><a href="#resource">06_resource</a><a href="#demo">08_demo_and_questions</a><a href="#index">07_code_index</a><button onclick="window.print()">인쇄 / PDF로 저장</button></aside><main><p><a href="easy_guide.html">처음 읽는 조원을 위한 쉬운 설명서부터 보기</a></p><header><h1>버튼 하나에서 DB까지,<br>담당 코드를 끝까지 설명하기</h1><p>파일별 책임 · 실제 메서드 흐름 · 모듈의 이유 · 알고리즘 실행 예제</p><span class="badge">조원별 5개 설명서</span><span class="badge">공유 메모 / 업무 보드 / 아이디어</span><p class="note">현재 브랜치의 소스는 저장소 루트 src입니다. 기존 작성본은 다른 브랜치와 이전 커밋에 보존합니다. 왼쪽 메뉴에서 담당자를 선택하고 코드 색인으로 실제 메서드를 따라가세요.</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 250" role="img" aria-label="화면에서 DB 저장과 결과 갱신까지">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>팀프로젝트 코드 브리핑 교재</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f8fafc;color:#172033;font:17px/1.85 system-ui,-apple-system,"Malgun Gothic",sans-serif}aside{position:fixed;inset:0 auto 0 0;width:250px;background:#12233b;color:white;padding:28px 20px;overflow:auto}aside h2{font-size:20px}aside a{display:block;color:#cbd5e1;text-decoration:none;padding:9px 0;font-size:14px}main{margin-left:250px;max-width:1250px;padding:45px 55px}header{background:#fff;border-top:5px solid #2563eb;padding:30px;border-radius:12px}header h1{margin:0;font-size:30px}section{background:white;margin:30px 0;padding:30px;border:1px solid #e2e8f0;border-radius:12px;scroll-margin-top:20px}h1{font-size:28px}h2{font-size:23px;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin-top:36px}h3{font-size:20px}a{color:#1d4ed8}table{width:100%;border-collapse:collapse;font-size:15px;margin:20px 0}th,td{border:1px solid #dbe2ea;padding:10px;text-align:left;vertical-align:top}th{background:#edf4ff}pre{overflow:auto;background:#132236;color:#ecf4ff;padding:18px;border-radius:8px;font-size:14px;line-height:1.7}code{font-size:.9em}button{border:0;border-radius:7px;background:#2563eb;color:white;padding:12px 18px;cursor:pointer}.badge{display:inline-block;padding:5px 10px;background:#e0f2fe;color:#075985;border-radius:15px;margin-right:8px;font-size:14px}img{max-width:100%}.note{background:#eff6ff;padding:16px;border-left:4px solid #3b82f6}@media(max-width:850px){aside{position:static;width:auto}aside a{display:inline-block;margin-right:15px}main{margin:0;padding:18px}section{padding:18px}table{font-size:13px}}@media print{aside,button{display:none}main{margin:0;padding:0;max-width:none}section{break-before:page;border:0;padding:0}pre{white-space:pre-wrap;color:#111;background:#f1f5f9}a{color:inherit;text-decoration:none}body{font-size:11pt}h1{font-size:20pt}}</style></head><body><aside><h2>팀프로젝트<br>코드 브리핑</h2><p>기존 기반 + 피드백 반영</p><a href="#start">00_reading_order</a><a href="#eclipse">09_eclipse_2023_12</a><a href="#flow">01_whole_flow</a><a href="#common">02_common</a><a href="#member">03_member</a><a href="#task">04_task</a><a href="#schedule">05_schedule</a><a href="#resource">06_resource</a><a href="#demo">08_demo_and_questions</a><a href="#index">07_code_index</a><button onclick="window.print()">인쇄 / PDF로 저장</button></aside><main><header><h1>버튼 하나에서 DB까지,<br>담당 코드를 끝까지 설명하기</h1><p>파일별 책임 · 실제 메서드 흐름 · 모듈의 이유 · 알고리즘 실행 예제</p><span class="badge">조원별 5개 설명서</span><span class="badge">공유 메모 / 업무 보드 / 아이디어</span><p class="note">현재 브랜치의 소스는 저장소 루트 src입니다. 기존 작성본은 다른 브랜치와 이전 커밋에 보존합니다. 왼쪽 메뉴에서 담당자를 선택하고 코드 색인으로 실제 메서드를 따라가세요.</p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 250" role="img" aria-label="화면에서 DB 저장과 결과 갱신까지">
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0L8,4L0,8" fill="#64748b"/></marker></defs>
 <rect width="1050" height="250" rx="20" fill="#f1f5f9"/>
 <g font-family="sans-serif" text-anchor="middle" font-size="18" fill="#0f172a">
@@ -9,6 +9,8 @@
 <rect x="860" y="50" width="170" height="100" rx="12" fill="#dcfce7"/><text x="945" y="90">reload</text><text x="945" y="122" font-size="14">결과와 화면 갱신</text>
 <text x="525" y="205" font-size="17">메모·댓글·공감의 핵심은 입력값이 어떤 행의 변화로 이어지는지 추적하는 것입니다.</text></g>
 <g stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"><path d="M200,100H225"/><path d="M410,100H435"/><path d="M620,100H645"/><path d="M830,100H855"/></g></svg><details><summary>실제 실행 화면 4장 보기</summary><p>상태별 업무 보드</p><img src="screenshots/tab-4.png" alt="상태별 업무 보드"><p>공유 메모</p><img src="screenshots/tab-5.png" alt="공유 메모와 자동 갱신"><p>월간 달력</p><img src="screenshots/tab-6.png" alt="월간 일정"><p>아이디어·댓글</p><img src="screenshots/tab-7.png" alt="아이디어 카드와 댓글"></details></header><section id="start"><h1 id="코드를-이해하고-브리핑하는-순서">코드를 이해하고 브리핑하는 순서</h1>
+
+<p>처음 읽는다면 <a href="easy/index.md">쉬운 설명서</a>를 먼저 읽으세요. 이 문서는 그다음 실제 소스 전체를 확인할 때 사용합니다.</p>
 
 <p>목표는 파일을 외우는 것이 아니라, 입력값을 바꿨을 때 결과를 <strong>실행 전에 예측하는 것</strong>입니다. 설명서만 읽고 이해했다고 판단하지 말고 아래 과정을 반복하세요.</p>
 
@@ -304,6 +306,8 @@
 <p>일반 저장 버튼·기존 조회는 단순한 동기 JDBC 호출입니다. 긴 원격 지연에서 모든 동작을 비동기로 처리하는 구조까지 도입하지 않았습니다. 자동 폴링과 시작 준비처럼 반복되거나 오래 걸릴 수 있는 작업에는 SwingWorker를 적용했습니다.</p>
 </section><section id="common"><h1 id="장민-db공통-시스템-브리핑">장*민 — DB·공통 시스템 브리핑</h1>
 
+<p><a href="easy/common.md">먼저 읽는 쉬운 설명</a> → 이 문서 → <a href="07_code_index.md">실제 코드 색인</a> 순서로 확인하세요.</p>
+
 <p>담당 범위는 <code>common</code> 패키지의 Main, DB_connection, SchemaSetup, TeamDAO, ActivityDAO와 schema.sql입니다. <strong>어떤 화면이 열려도 같은 사용자·팀 데이터를 사용하도록 기반을 제공하는 역할</strong>입니다. ActivityPanel 화면은 신*준 담당이며 기록 저장·조회 DAO는 이 문서의 담당입니다.</p>
 
 <h2 id="시작-전에-알아둘-값">시작 전에 알아둘 값</h2>
@@ -412,6 +416,8 @@
 
 <p>demo1으로 두 소속을 확인하고 팀42에 들어가 보세요. users가 비어 있지 않으면 데모 초기화가 왜 건너뛰는지 설명하세요. ActivityDAO.record에서 commit을 추가하면 호출한 메모 저장에 어떤 문제가 생길지 예측하세요. 각 메서드의 실제 위치는 <a href="07_code_index.md#common">코드 색인</a>을 확인하세요.</p>
 </section><section id="member"><h1 id="이찬-로그인팀원공유-메모-브리핑">이*찬 — 로그인·팀원·공유 메모 브리핑</h1>
+
+<p><a href="easy/member.md">먼저 읽는 쉬운 설명</a> → 이 문서 → <a href="07_code_index.md">실제 코드 색인</a> 순서로 확인하세요.</p>
 
 <p>담당 파일은 member 패키지의 UserDAO, LoginFrame, MemberDAO, MemberFrame, NoteDAO, NotePanel입니다. 기존 로그인·팀원 관리에 <strong>사용자를 식별할 수 있는 공유 메모</strong>를 추가했습니다. 메모에서 업무를 만드는 창과 SQL은 윤*훈 담당 파일을 호출합니다.</p>
 
@@ -530,7 +536,7 @@
 
 <h2 id="자동-갱신-알고리즘">자동 갱신 알고리즘</h2>
 
-<p><code>Timer(3000)</code> → 탭이 보이는지 검사 → reload → loading이면 건너뜀 → SwingWorker.doInBackground → 별도 Connection으로 NoteDAO.list → done → 목록 교체·이전 선택 ID 복원 → loading=false.</p>
+<p><code>Timer(3000)</code> → 탭이 보이는지 검사 → reload → loading이면 건너뜀 → SwingWorker.doInBackground → 별도 Connection으로 NoteDAO.list → done → 목록 교체·조회가 끝난 순간의 선택 ID 복원 → loading=false.</p>
 
 <p>메서드별 역할:</p>
 
@@ -588,6 +594,8 @@
 
 <p>스스로 답하세요: loading을 없애면? 팀 조건을 없애면? history INSERT만 실패하면? 팀원 삭제가 users까지 삭제하지 않는 이유는? 정답: 중복 배경 작업 가능, 타 팀 데이터 노출 가능, 메모 저장도 rollback, 기존 업무·자료가 참조하는 사용자와 로그인 계정을 보존해야 하기 때문입니다.</p>
 </section><section id="task"><h1 id="윤훈-업무-crud보드메모-연결-브리핑">윤*훈 — 업무 CRUD·보드·메모 연결 브리핑</h1>
+
+<p><a href="easy/task.md">먼저 읽는 쉬운 설명</a> → 이 문서 → <a href="07_code_index.md">실제 코드 색인</a> 순서로 확인하세요.</p>
 
 <p>담당은 task 패키지의 TaskDAO, TaskFrame, TaskBoardPanel, TaskCardRenderer, TaskFromNoteDialog입니다. 기존 CRUD와 진행률 연결을 유지하고, <strong>같은 tasks 데이터를 표·보드·내 업무로 다르게 보여주는 기능</strong>을 추가했습니다.</p>
 
@@ -699,6 +707,8 @@
 <p>예측 문제: 팀7 업무3건 중 회원30이2건이면 내 업무 표시 개수는? 완료 상태로 바꾸면 새 행이 생기는가? 원문 메모를 삭제하면 업무도 없어지는가? 답은 2건, UPDATE라 새 행 없음, 업무는 남고 연결만 삭제입니다.</p>
 </section><section id="schedule"><h1 id="이주-진행률일정달력-브리핑">이*주 — 진행률·일정·달력 브리핑</h1>
 
+<p><a href="easy/schedule.md">먼저 읽는 쉬운 설명</a> → 이 문서 → <a href="07_code_index.md">실제 코드 색인</a> 순서로 확인하세요.</p>
+
 <p>담당은 schedule 패키지의 InlineProgressData, InlineProgressDAO, InlineProgressPanel, ScheduleDAO, SchedulePanel입니다. <strong>진행률은 기존 tasks를 계산하고, 일정은 schedules를 조회한다</strong>는 차이부터 설명하세요. 일정 개수로 업무 완료율을 계산하지 않습니다.</p>
 
 <h2 id="진행률-데이터">진행률 데이터</h2>
@@ -806,7 +816,13 @@
 <p>“진행률은 tasks에서 완료 개수와 전체 개수를 세어 계산합니다. 일정은 시작과 종료 기간이 표시 월과 겹치는 조건으로 조회합니다. 달력은 첫날 요일로 빈칸을 정하고 각 날짜에 해당 일정을 넣습니다.”</p>
 
 <p>직접 예측: 업무0개는0%, 완료2/전체3은67%, 완료된 과거 업무는완료, 10/30~11/2는11월에표시입니다. 이 네 경우를 코드 분기와 함께 설명할 수 있어야 합니다.</p>
+
+<h2 id="업무-마감일-표시">업무 마감일 표시</h2>
+
+<p>ScheduleDAO.listDeadlines는 tasks에서 현재 팀·표시 월의 업무를 직접 읽습니다. SchedulePanel.dayText는 별도 일정은 기간에 해당하는 날마다, 업무는 마감일 하루에 표시합니다. 업무는 <code>[업무] 제목 (상태 · 담당자)</code>, 별도 일정은 <code>[일정] 제목</code>으로 구분합니다. 완료 업무도 완료 상태를 붙여 표시합니다. 업무를 수정·삭제한 뒤 달력 탭을 다시 열거나 새로고침하면 원본을 다시 읽습니다. schedules에 업무를 복사하지 않아 중복 일정이 생기지 않습니다.</p>
 </section><section id="resource"><h1 id="신준-자료대시보드아이디어-협업-브리핑">신*준 — 자료·대시보드·아이디어 협업 브리핑</h1>
+
+<p><a href="easy/resource.md">먼저 읽는 쉬운 설명</a> → 이 문서 → <a href="07_code_index.md">실제 코드 색인</a> 순서로 확인하세요.</p>
 
 <p>담당 파일은 resource 패키지의 MainFrame, DashboardPanel, MaterialDAO, MaterialPanel, IdeaDAO, IdeaPanel, IdeaCardRenderer, ActivityPanel입니다. 공통 ActivityDAO는 장*민 담당이며, 이 영역은 기록을 보여주는 화면을 맡습니다.</p>
 
@@ -904,7 +920,7 @@
 
 <p>왼쪽은 아이디어 카드 JList, 오른쪽은 내용과 댓글, 아래는 댓글 입력입니다. list 선택 이벤트가 showDetail을 호출합니다. 내 글 수정은 UI와 DAO에서 모두 작성자 조건을 확인합니다. 댓글 등록 성공 후에만 입력칸을 비우므로 오류가 나면 입력을 잃지 않습니다.</p>
 
-<p>5초 Timer가 목록을 갱신합니다. SQL은 별도 Connection의 SwingWorker에서 실행하고 done에서 모델을 바꿉니다. 이전 선택 id를 기억하므로 갱신 후 같은 게시물을 다시 선택합니다. 댓글 입력 JTextField는 목록 갱신에서 바꾸지 않습니다. 선택한 게시물의 댓글은 showDetail에서 현재 내용으로 읽습니다.</p>
+<p>5초 Timer가 목록을 갱신합니다. SQL은 별도 Connection의 SwingWorker에서 실행하고 done에서 모델을 바꿉니다. 조회가 끝난 순간에 선택된 id를 기억하므로, 조회 도중 다른 글을 선택해도 그 새 선택을 유지합니다. 댓글 입력 JTextField는 목록 갱신에서 바꾸지 않습니다. 선택한 게시물의 댓글은 showDetail에서 현재 내용으로 읽습니다.</p>
 
 <p>IdeaCardRenderer는 제목·작성자·댓글/공감 수를 JLabel3개에 넣어 작은 카드로 보여줍니다. 역할은 시각적 표현뿐이며, 데이터 저장은 하지 않습니다. ListCellRenderer 인터페이스는 JList가 카드 모양을 요청하는 약속입니다.</p>
 
@@ -1003,7 +1019,7 @@
 
 <p><strong>코드에서 1이 보이면 모두 고정 ID인가?</strong> 아닙니다. setInt(1,teamId)의1은 SQL 첫 물음표 위치, version의1은 첫 버전, 날짜의1은 월 첫날일 수 있습니다. 변수 의미로 구분해야 합니다.</p>
 
-<p><strong>검증을 어떻게 했나?</strong> H2 MySQL 호환모드에서52개 검사로 실제 DAO를 실행했습니다. 팀 분리, 버전 충돌, 메모→업무, 일정 겹침, 댓글·공감, 외래키 삭제를 확인했습니다. GUI 검사는9개 탭을 열어 통합 오류를 확인합니다. MySQL 실서버와 물리 다중PC는 별도검증입니다.</p>
+<p><strong>검증을 어떻게 했나?</strong> H2 MySQL 호환모드에서65개 검사로 실제 DAO를 실행했습니다. 팀 분리, 버전 충돌, 메모→업무, 일정 겹침, 댓글·공감, 외래키 삭제, 업무 마감일 달력 표시를 확인했습니다. GUI 검사는9개 탭을 열어 통합 오류를 확인합니다. MySQL 실서버와 물리 다중PC는 별도검증입니다.</p>
 
 <h2 id="기능-경계를-정확히-말하기">기능 경계를 정확히 말하기</h2>
 
@@ -1320,11 +1336,11 @@
   <td>DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/member/NotePanel.java#L88">doInBackground</a></td>
+  <td><a href="../src/teamproject/member/NotePanel.java#L87">doInBackground</a></td>
   <td>백그라운드에서 DB 연결·조회만 수행합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/member/NotePanel.java#L94">done</a></td>
+  <td><a href="../src/teamproject/member/NotePanel.java#L93">done</a></td>
   <td>배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다.</td>
 </tr>
 <tr>
@@ -1603,7 +1619,7 @@
   <td>등록·수정 공통 입력창에서 날짜·필수 값을 검사합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/task/TaskFrame.java#L446">addInputRow</a></td>
+  <td><a href="../src/teamproject/task/TaskFrame.java#L452">addInputRow</a></td>
   <td>내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요.</td>
 </tr>
 </tbody>
@@ -1786,11 +1802,19 @@
   <td>현재 팀 목록을 SQL로 조회하여 DTO 목록을 만듭니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/schedule/ScheduleDAO.java#L53">save</a></td>
+  <td><a href="../src/teamproject/schedule/ScheduleDAO.java#L59">Deadline</a></td>
+  <td>내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요.</td>
+</tr>
+<tr>
+  <td><a href="../src/teamproject/schedule/ScheduleDAO.java#L68">listDeadlines</a></td>
+  <td>현재 팀·표시 월의 업무 마감일을 원본 업무 표에서 읽습니다.</td>
+</tr>
+<tr>
+  <td><a href="../src/teamproject/schedule/ScheduleDAO.java#L96">save</a></td>
   <td>입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/schedule/ScheduleDAO.java#L94">delete</a></td>
+  <td><a href="../src/teamproject/schedule/ScheduleDAO.java#L137">delete</a></td>
   <td>현재 팀과 식별 조건에 맞는 행만 삭제합니다.</td>
 </tr>
 </tbody>
@@ -1809,27 +1833,31 @@
 </thead>
 <tbody>
 <tr>
-  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L25">isCellEditable</a></td>
+  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L26">isCellEditable</a></td>
   <td>내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L31">SchedulePanel</a></td>
+  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L32">SchedulePanel</a></td>
   <td>필드와 화면 부품·이벤트를 초기화하는 생성자입니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L84">reload</a></td>
+  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L88">reload</a></td>
   <td>DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L116">selected</a></td>
+  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L122">dayText</a></td>
+  <td>해당 날짜의 별도 일정과 업무 마감일을 구분해 표시할 글자를 만듭니다.</td>
+</tr>
+<tr>
+  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L145">selected</a></td>
   <td>선택 항목을 반환하고 없으면 안내합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L125">edit</a></td>
+  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L154">edit</a></td>
   <td>입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L161">delete</a></td>
+  <td><a href="../src/teamproject/schedule/SchedulePanel.java#L190">delete</a></td>
   <td>현재 팀과 식별 조건에 맞는 행만 삭제합니다.</td>
 </tr>
 </tbody>
@@ -1996,11 +2024,11 @@
   <td>DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/resource/IdeaPanel.java#L103">doInBackground</a></td>
+  <td><a href="../src/teamproject/resource/IdeaPanel.java#L102">doInBackground</a></td>
   <td>백그라운드에서 DB 연결·조회만 수행합니다.</td>
 </tr>
 <tr>
-  <td><a href="../src/teamproject/resource/IdeaPanel.java#L109">done</a></td>
+  <td><a href="../src/teamproject/resource/IdeaPanel.java#L108">done</a></td>
   <td>배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다.</td>
 </tr>
 <tr>

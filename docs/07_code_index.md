@@ -116,8 +116,8 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 | [addNotify](../src/teamproject/member/NotePanel.java#L71) | 패널이 화면에 붙으면 자동 갱신 타이머를 시작합니다. |
 | [removeNotify](../src/teamproject/member/NotePanel.java#L77) | 화면에서 떨어지면 타이머를 중지합니다. |
 | [reload](../src/teamproject/member/NotePanel.java#L83) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
-| [doInBackground](../src/teamproject/member/NotePanel.java#L88) | 백그라운드에서 DB 연결·조회만 수행합니다. |
-| [done](../src/teamproject/member/NotePanel.java#L94) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
+| [doInBackground](../src/teamproject/member/NotePanel.java#L87) | 백그라운드에서 DB 연결·조회만 수행합니다. |
+| [done](../src/teamproject/member/NotePanel.java#L93) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
 | [selected](../src/teamproject/member/NotePanel.java#L113) | 선택 항목을 반환하고 없으면 안내합니다. |
 | [edit](../src/teamproject/member/NotePanel.java#L119) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
 | [delete](../src/teamproject/member/NotePanel.java#L153) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
@@ -206,7 +206,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 | [deleteTask](../src/teamproject/task/TaskFrame.java#L279) | 같은 팀의 업무를 삭제합니다. |
 | [completeTask](../src/teamproject/task/TaskFrame.java#L313) | 선택 업무를 완료로 변경하고 갱신합니다. |
 | [showTaskInputDialog](../src/teamproject/task/TaskFrame.java#L339) | 등록·수정 공통 입력창에서 날짜·필수 값을 검사합니다. |
-| [addInputRow](../src/teamproject/task/TaskFrame.java#L446) | 내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요. |
+| [addInputRow](../src/teamproject/task/TaskFrame.java#L452) | 내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요. |
 
 ### TaskFromNoteDialog.java
 
@@ -271,8 +271,10 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 |---|---|
 | [Schedule](../src/teamproject/schedule/ScheduleDAO.java#L20) | 내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요. |
 | [list](../src/teamproject/schedule/ScheduleDAO.java#L29) | 현재 팀 목록을 SQL로 조회하여 DTO 목록을 만듭니다. |
-| [save](../src/teamproject/schedule/ScheduleDAO.java#L53) | 입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다. |
-| [delete](../src/teamproject/schedule/ScheduleDAO.java#L94) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
+| [Deadline](../src/teamproject/schedule/ScheduleDAO.java#L59) | 내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요. |
+| [listDeadlines](../src/teamproject/schedule/ScheduleDAO.java#L68) | 현재 팀·표시 월의 업무 마감일을 원본 업무 표에서 읽습니다. |
+| [save](../src/teamproject/schedule/ScheduleDAO.java#L96) | 입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다. |
+| [delete](../src/teamproject/schedule/ScheduleDAO.java#L137) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
 
 ### SchedulePanel.java
 
@@ -280,12 +282,13 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
-| [isCellEditable](../src/teamproject/schedule/SchedulePanel.java#L25) | 내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요. |
-| [SchedulePanel](../src/teamproject/schedule/SchedulePanel.java#L31) | 필드와 화면 부품·이벤트를 초기화하는 생성자입니다. |
-| [reload](../src/teamproject/schedule/SchedulePanel.java#L84) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
-| [selected](../src/teamproject/schedule/SchedulePanel.java#L116) | 선택 항목을 반환하고 없으면 안내합니다. |
-| [edit](../src/teamproject/schedule/SchedulePanel.java#L125) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
-| [delete](../src/teamproject/schedule/SchedulePanel.java#L161) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
+| [isCellEditable](../src/teamproject/schedule/SchedulePanel.java#L26) | 내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요. |
+| [SchedulePanel](../src/teamproject/schedule/SchedulePanel.java#L32) | 필드와 화면 부품·이벤트를 초기화하는 생성자입니다. |
+| [reload](../src/teamproject/schedule/SchedulePanel.java#L88) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
+| [dayText](../src/teamproject/schedule/SchedulePanel.java#L122) | 해당 날짜의 별도 일정과 업무 마감일을 구분해 표시할 글자를 만듭니다. |
+| [selected](../src/teamproject/schedule/SchedulePanel.java#L145) | 선택 항목을 반환하고 없으면 안내합니다. |
+| [edit](../src/teamproject/schedule/SchedulePanel.java#L154) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
+| [delete](../src/teamproject/schedule/SchedulePanel.java#L190) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
 
 ## resource
 
@@ -346,8 +349,8 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 | [addNotify](../src/teamproject/resource/IdeaPanel.java#L87) | 패널이 화면에 붙으면 자동 갱신 타이머를 시작합니다. |
 | [removeNotify](../src/teamproject/resource/IdeaPanel.java#L93) | 화면에서 떨어지면 타이머를 중지합니다. |
 | [reload](../src/teamproject/resource/IdeaPanel.java#L98) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
-| [doInBackground](../src/teamproject/resource/IdeaPanel.java#L103) | 백그라운드에서 DB 연결·조회만 수행합니다. |
-| [done](../src/teamproject/resource/IdeaPanel.java#L109) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
+| [doInBackground](../src/teamproject/resource/IdeaPanel.java#L102) | 백그라운드에서 DB 연결·조회만 수행합니다. |
+| [done](../src/teamproject/resource/IdeaPanel.java#L108) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
 | [selected](../src/teamproject/resource/IdeaPanel.java#L128) | 선택 항목을 반환하고 없으면 안내합니다. |
 | [showDetail](../src/teamproject/resource/IdeaPanel.java#L134) | 선택 게시물과 댓글을 오른쪽에 표시합니다. |
 | [edit](../src/teamproject/resource/IdeaPanel.java#L158) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
