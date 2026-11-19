@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 250" role="img" aria-label="화면에서 DB 저장과 결과 갱신까지">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0L8,4L0,8" fill="#64748b"/></marker></defs>
+<rect width="1050" height="250" rx="20" fill="#f1f5f9"/>
+<g font-family="sans-serif" text-anchor="middle" font-size="18" fill="#0f172a">
+<rect x="20" y="50" width="180" height="100" rx="12" fill="#dbeafe"/><text x="110" y="90">버튼·입력</text><text x="110" y="122" font-size="14">Frame / Panel</text>
+<rect x="230" y="50" width="180" height="100" rx="12" fill="#e0e7ff"/><text x="320" y="90">조건·반복·DAO</text><text x="320" y="122" font-size="14">검사와 처리 순서</text>
+<rect x="440" y="50" width="180" height="100" rx="12" fill="#ccfbf1"/><text x="530" y="90">PreparedStatement</text><text x="530" y="122" font-size="14">SQL + 인수</text>
+<rect x="650" y="50" width="180" height="100" rx="12" fill="#fef3c7"/><text x="740" y="90">DB</text><text x="740" y="122" font-size="14">팀·사용자·버전</text>
+<rect x="860" y="50" width="170" height="100" rx="12" fill="#dcfce7"/><text x="945" y="90">reload</text><text x="945" y="122" font-size="14">결과와 화면 갱신</text>
+<text x="525" y="205" font-size="17">메모·댓글·공감의 핵심은 입력값이 어떤 행의 변화로 이어지는지 추적하는 것입니다.</text></g>
+<g stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"><path d="M200,100H225"/><path d="M410,100H435"/><path d="M620,100H645"/><path d="M830,100H855"/></g></svg>

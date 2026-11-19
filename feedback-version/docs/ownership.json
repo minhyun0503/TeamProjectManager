@@ -1,0 +1,1109 @@
+[
+  {
+    "owner": "장*민",
+    "package": "common",
+    "file": "src/teamproject/common/ActivityDAO.java",
+    "purpose": "활동 기록 저장·최근 목록 조회",
+    "methods": [
+      {
+        "method": "record",
+        "line": 11,
+        "explanation": "현재 트랜잭션에서 활동 한 행을 저장합니다."
+      },
+      {
+        "method": "recent",
+        "line": 22,
+        "explanation": "현재 팀의 최근 30개 활동을 읽습니다."
+      }
+    ]
+  },
+  {
+    "owner": "장*민",
+    "package": "common",
+    "file": "src/teamproject/common/DB_connection.java",
+    "purpose": "DB 접속 설정과 연결 생성",
+    "methods": [
+      {
+        "method": "configure",
+        "line": 15,
+        "explanation": "URL·DB 계정을 메모리에 설정합니다."
+      },
+      {
+        "method": "open",
+        "line": 22,
+        "explanation": "새 JDBC Connection을 반환합니다."
+      }
+    ]
+  },
+  {
+    "owner": "장*민",
+    "package": "common",
+    "file": "src/teamproject/common/Main.java",
+    "purpose": "진입점·실행 모드와 DB 준비",
+    "methods": [
+      {
+        "method": "main",
+        "line": 12,
+        "explanation": "EDT에 시작 작업을 예약합니다."
+      },
+      {
+        "method": "start",
+        "line": 17,
+        "explanation": "모드를 선택하고 DB 준비 작업 후 로그인 창을 엽니다."
+      },
+      {
+        "method": "doInBackground",
+        "line": 71,
+        "explanation": "백그라운드에서 DB 연결·조회만 수행합니다."
+      },
+      {
+        "method": "done",
+        "line": 82,
+        "explanation": "배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다."
+      }
+    ]
+  },
+  {
+    "owner": "장*민",
+    "package": "common",
+    "file": "src/teamproject/common/SchemaSetup.java",
+    "purpose": "전용 스키마·데모 가상 데이터 준비",
+    "methods": [
+      {
+        "method": "initialize",
+        "line": 13,
+        "explanation": "스키마 리소스를 실행하고 필요하면 데모 데이터를 넣습니다."
+      },
+      {
+        "method": "seedDemo",
+        "line": 27,
+        "explanation": "처음인 경우만 가상 데이터를 트랜잭션으로 저장합니다."
+      }
+    ]
+  },
+  {
+    "owner": "장*민",
+    "package": "common",
+    "file": "src/teamproject/common/TeamDAO.java",
+    "purpose": "소속 팀 목록·공통 소속 검사",
+    "methods": [
+      {
+        "method": "Team",
+        "line": 18,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "getTeamId",
+        "line": 23,
+        "explanation": "객체가 보관한 TeamId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getTeamName",
+        "line": 27,
+        "explanation": "객체가 보관한 TeamName 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "toString",
+        "line": 32,
+        "explanation": "목록·선택창에 보이는 대표 문자열을 반환합니다."
+      },
+      {
+        "method": "findTeams",
+        "line": 37,
+        "explanation": "회원의 소속 팀을 JOIN으로 조회합니다."
+      },
+      {
+        "method": "requireMember",
+        "line": 59,
+        "explanation": "팀·회원 소속이 없으면 예외로 저장을 중단합니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*찬",
+    "package": "member",
+    "file": "src/teamproject/member/LoginFrame.java",
+    "purpose": "로그인 입력·팀 선택",
+    "methods": [
+      {
+        "method": "LoginFrame",
+        "line": 27,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "doLogin",
+        "line": 59,
+        "explanation": "입력 검사→인증→소속 조회→선택→통합 화면 이동입니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*찬",
+    "package": "member",
+    "file": "src/teamproject/member/MemberDAO.java",
+    "purpose": "팀원 SQL·두 표 변경 트랜잭션",
+    "methods": [
+      {
+        "method": "loadMembers",
+        "line": 17,
+        "explanation": "현재 팀의 사용자·소속 정보를 표에 채웁니다."
+      },
+      {
+        "method": "insertMember",
+        "line": 70,
+        "explanation": "계정·소속을 함께 저장하고 실패 시 롤백합니다."
+      },
+      {
+        "method": "updateMember",
+        "line": 151,
+        "explanation": "소속 확인 후 계정 정보·역할을 함께 바꿉니다."
+      },
+      {
+        "method": "deleteMember",
+        "line": 232,
+        "explanation": "계정은 남기고 해당 팀 소속만 지웁니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*찬",
+    "package": "member",
+    "file": "src/teamproject/member/MemberFrame.java",
+    "purpose": "팀원 표와 CRUD 입력창",
+    "methods": [
+      {
+        "method": "MemberFrame",
+        "line": 46,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "reload",
+        "line": 115,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "registerMember",
+        "line": 120,
+        "explanation": "등록 입력창의 값을 검사하고 DAO를 호출합니다."
+      },
+      {
+        "method": "updateMember",
+        "line": 188,
+        "explanation": "소속 확인 후 계정 정보·역할을 함께 바꿉니다."
+      },
+      {
+        "method": "deleteMember",
+        "line": 271,
+        "explanation": "계정은 남기고 해당 팀 소속만 지웁니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*찬",
+    "package": "member",
+    "file": "src/teamproject/member/NoteDAO.java",
+    "purpose": "메모 데이터·버전 충돌·내용 이력",
+    "methods": [
+      {
+        "method": "Note",
+        "line": 17,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "toString",
+        "line": 34,
+        "explanation": "목록·선택창에 보이는 대표 문자열을 반환합니다."
+      },
+      {
+        "method": "list",
+        "line": 39,
+        "explanation": "현재 팀 목록을 SQL로 조회하여 DTO 목록을 만듭니다."
+      },
+      {
+        "method": "save",
+        "line": 63,
+        "explanation": "입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다."
+      },
+      {
+        "method": "delete",
+        "line": 125,
+        "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
+      },
+      {
+        "method": "history",
+        "line": 136,
+        "explanation": "현재 팀 메모의 내용 버전을 최신순 문자열로 반환합니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*찬",
+    "package": "member",
+    "file": "src/teamproject/member/NotePanel.java",
+    "purpose": "공유 메모 화면·폴링·편집",
+    "methods": [
+      {
+        "method": "NotePanel",
+        "line": 23,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "addNotify",
+        "line": 71,
+        "explanation": "패널이 화면에 붙으면 자동 갱신 타이머를 시작합니다."
+      },
+      {
+        "method": "removeNotify",
+        "line": 77,
+        "explanation": "화면에서 떨어지면 타이머를 중지합니다."
+      },
+      {
+        "method": "reload",
+        "line": 83,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "doInBackground",
+        "line": 88,
+        "explanation": "백그라운드에서 DB 연결·조회만 수행합니다."
+      },
+      {
+        "method": "done",
+        "line": 94,
+        "explanation": "배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다."
+      },
+      {
+        "method": "selected",
+        "line": 113,
+        "explanation": "선택 항목을 반환하고 없으면 안내합니다."
+      },
+      {
+        "method": "edit",
+        "line": 119,
+        "explanation": "입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다."
+      },
+      {
+        "method": "delete",
+        "line": 153,
+        "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
+      },
+      {
+        "method": "history",
+        "line": 168,
+        "explanation": "현재 팀 메모의 내용 버전을 최신순 문자열로 반환합니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*찬",
+    "package": "member",
+    "file": "src/teamproject/member/UserDAO.java",
+    "purpose": "로그인 인증 결과",
+    "methods": [
+      {
+        "method": "User",
+        "line": 17,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "getUserId",
+        "line": 22,
+        "explanation": "객체가 보관한 UserId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getName",
+        "line": 26,
+        "explanation": "객체가 보관한 Name 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "login",
+        "line": 32,
+        "explanation": "아이디·비밀번호가 맞으면 회원 객체, 아니면 null입니다."
+      }
+    ]
+  },
+  {
+    "owner": "윤*훈",
+    "package": "task",
+    "file": "src/teamproject/task/TaskBoardPanel.java",
+    "purpose": "상태별 업무 분류·내 업무 필터",
+    "methods": [
+      {
+        "method": "TaskBoardPanel",
+        "line": 20,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "reload",
+        "line": 62,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "move",
+        "line": 74,
+        "explanation": "선택 카드의 상태를 바꾸고 세 칸을 다시 채웁니다."
+      }
+    ]
+  },
+  {
+    "owner": "윤*훈",
+    "package": "task",
+    "file": "src/teamproject/task/TaskCardRenderer.java",
+    "purpose": "업무 카드의 표시",
+    "methods": [
+      {
+        "method": "TaskCardRenderer",
+        "line": 13,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "getListCellRendererComponent",
+        "line": 25,
+        "explanation": "DTO의 값을 라벨에 넣고 카드 패널을 반환합니다."
+      }
+    ]
+  },
+  {
+    "owner": "윤*훈",
+    "package": "task",
+    "file": "src/teamproject/task/TaskDAO.java",
+    "purpose": "업무 SQL·보드 조회·메모 연결",
+    "methods": [
+      {
+        "method": "showTasks",
+        "line": 18,
+        "explanation": "현재 팀 업무를 콘솔로 출력합니다."
+      },
+      {
+        "method": "loadTasks",
+        "line": 47,
+        "explanation": "현재 팀 업무를 표 모델에 채웁니다."
+      },
+      {
+        "method": "Assignee",
+        "line": 95,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "getUserId",
+        "line": 100,
+        "explanation": "객체가 보관한 UserId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getName",
+        "line": 104,
+        "explanation": "객체가 보관한 Name 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "toString",
+        "line": 110,
+        "explanation": "목록·선택창에 보이는 대표 문자열을 반환합니다."
+      },
+      {
+        "method": "TaskInfo",
+        "line": 125,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "getTaskId",
+        "line": 140,
+        "explanation": "객체가 보관한 TaskId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getTitle",
+        "line": 144,
+        "explanation": "객체가 보관한 Title 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getDescription",
+        "line": 148,
+        "explanation": "객체가 보관한 Description 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getAssigneeId",
+        "line": 152,
+        "explanation": "객체가 보관한 AssigneeId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getStatus",
+        "line": 156,
+        "explanation": "객체가 보관한 Status 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getDueDate",
+        "line": 160,
+        "explanation": "객체가 보관한 DueDate 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getTeamMembers",
+        "line": 166,
+        "explanation": "현재 팀의 담당자 선택 목록입니다."
+      },
+      {
+        "method": "findTask",
+        "line": 199,
+        "explanation": "현재 팀의 업무 상세 한 건 또는 null입니다."
+      },
+      {
+        "method": "insertTask",
+        "line": 238,
+        "explanation": "같은 팀 담당자인지 확인하고 업무를 만듭니다."
+      },
+      {
+        "method": "updateTask",
+        "line": 274,
+        "explanation": "같은 팀의 업무를 수정하고 영향 행 여부를 반환합니다."
+      },
+      {
+        "method": "updateTaskStatus",
+        "line": 310,
+        "explanation": "같은 팀 업무의 상태만 바꿉니다."
+      },
+      {
+        "method": "deleteTask",
+        "line": 324,
+        "explanation": "같은 팀의 업무를 삭제합니다."
+      },
+      {
+        "method": "requireTeamMember",
+        "line": 335,
+        "explanation": "업무 담당자가 현재 팀에 있는지 검사합니다."
+      },
+      {
+        "method": "Card",
+        "line": 353,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "toString",
+        "line": 362,
+        "explanation": "목록·선택창에 보이는 대표 문자열을 반환합니다."
+      },
+      {
+        "method": "board",
+        "line": 367,
+        "explanation": "현재 팀·선택한 개인 필터로 카드 목록을 반환합니다."
+      },
+      {
+        "method": "insertFromNote",
+        "line": 393,
+        "explanation": "메모 소속 확인→업무 생성 키→연결 저장→commit입니다."
+      },
+      {
+        "method": "sourceNote",
+        "line": 446,
+        "explanation": "현재 팀 업무에 연결된 최신 원문 메모입니다."
+      }
+    ]
+  },
+  {
+    "owner": "윤*훈",
+    "package": "task",
+    "file": "src/teamproject/task/TaskFrame.java",
+    "purpose": "기존 업무 CRUD·표·진행률 통합",
+    "methods": [
+      {
+        "method": "TaskFrame",
+        "line": 50,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "isCellEditable",
+        "line": 66,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "mouseClicked",
+        "line": 79,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "fitColumns",
+        "line": 146,
+        "explanation": "열별 제목·행의 최대 표시 너비를 찾습니다."
+      },
+      {
+        "method": "reload",
+        "line": 174,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "getSelectedTaskId",
+        "line": 180,
+        "explanation": "선택 행의 실제 업무 번호를 읽고 선택이 없으면 -1입니다."
+      },
+      {
+        "method": "registerTask",
+        "line": 194,
+        "explanation": "입력→등록→표·진행률 갱신입니다."
+      },
+      {
+        "method": "updateTask",
+        "line": 225,
+        "explanation": "같은 팀의 업무를 수정하고 영향 행 여부를 반환합니다."
+      },
+      {
+        "method": "deleteTask",
+        "line": 279,
+        "explanation": "같은 팀의 업무를 삭제합니다."
+      },
+      {
+        "method": "completeTask",
+        "line": 313,
+        "explanation": "선택 업무를 완료로 변경하고 갱신합니다."
+      },
+      {
+        "method": "showTaskInputDialog",
+        "line": 339,
+        "explanation": "등록·수정 공통 입력창에서 날짜·필수 값을 검사합니다."
+      },
+      {
+        "method": "addInputRow",
+        "line": 446,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      }
+    ]
+  },
+  {
+    "owner": "윤*훈",
+    "package": "task",
+    "file": "src/teamproject/task/TaskFromNoteDialog.java",
+    "purpose": "공유 메모에서 결정 업무 입력",
+    "methods": [
+      {
+        "method": "open",
+        "line": 15,
+        "explanation": "선택한 메모로 업무 입력창을 열고 업무·연결 저장을 호출합니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*주",
+    "package": "schedule",
+    "file": "src/teamproject/schedule/InlineProgressDAO.java",
+    "purpose": "진행률 계산용 데이터 조회",
+    "methods": [
+      {
+        "method": "load",
+        "line": 15,
+        "explanation": "현재 팀의 사람·업무를 계산용 객체로 읽습니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*주",
+    "package": "schedule",
+    "file": "src/teamproject/schedule/InlineProgressData.java",
+    "purpose": "개수·퍼센트·날짜 계산",
+    "methods": [
+      {
+        "method": "Person",
+        "line": 17,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "getUserId",
+        "line": 22,
+        "explanation": "객체가 보관한 UserId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getName",
+        "line": 26,
+        "explanation": "객체가 보관한 Name 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "toString",
+        "line": 32,
+        "explanation": "목록·선택창에 보이는 대표 문자열을 반환합니다."
+      },
+      {
+        "method": "Task",
+        "line": 43,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "getAssigneeId",
+        "line": 49,
+        "explanation": "객체가 보관한 AssigneeId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getStatus",
+        "line": 53,
+        "explanation": "객체가 보관한 Status 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getDueDate",
+        "line": 57,
+        "explanation": "객체가 보관한 DueDate 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getPeople",
+        "line": 66,
+        "explanation": "객체가 보관한 People 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getTasks",
+        "line": 70,
+        "explanation": "객체가 보관한 Tasks 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getTotalCount",
+        "line": 76,
+        "explanation": "전체 또는 지정한 개인의 업무 수를 셉니다."
+      },
+      {
+        "method": "getCompletedCount",
+        "line": 87,
+        "explanation": "개인 조건과 완료 상태가 일치하는 업무를 셉니다."
+      },
+      {
+        "method": "getPercent",
+        "line": 100,
+        "explanation": "0건 분기 후 완료/전체 비율을 반올림합니다."
+      },
+      {
+        "method": "getDeadline",
+        "line": 112,
+        "explanation": "완료·날짜 없음·과거·오늘·미래로 나누어 안내합니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*주",
+    "package": "schedule",
+    "file": "src/teamproject/schedule/InlineProgressPanel.java",
+    "purpose": "진행률·마감 안내 표시",
+    "methods": [
+      {
+        "method": "attach",
+        "line": 45,
+        "explanation": "진행률 패널을 기존 화면 위쪽에 붙여 반환합니다."
+      },
+      {
+        "method": "InlineProgressPanel",
+        "line": 53,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "actionPerformed",
+        "line": 94,
+        "explanation": "사용자 선택과 새로고침 이벤트를 구분합니다."
+      },
+      {
+        "method": "reload",
+        "line": 114,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "showProgress",
+        "line": 142,
+        "explanation": "전체·개인 막대와 오늘/지연 개수를 표시합니다."
+      },
+      {
+        "method": "setBar",
+        "line": 177,
+        "explanation": "특정 사용자의 개수·퍼센트를 막대에 넣습니다."
+      },
+      {
+        "method": "showDeadlines",
+        "line": 189,
+        "explanation": "업무 표의 각 행에 마감 안내를 계산해 넣습니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*주",
+    "package": "schedule",
+    "file": "src/teamproject/schedule/ScheduleDAO.java",
+    "purpose": "일정 SQL·기간 검증",
+    "methods": [
+      {
+        "method": "Schedule",
+        "line": 20,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "list",
+        "line": 29,
+        "explanation": "현재 팀 목록을 SQL로 조회하여 DTO 목록을 만듭니다."
+      },
+      {
+        "method": "save",
+        "line": 53,
+        "explanation": "입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다."
+      },
+      {
+        "method": "delete",
+        "line": 94,
+        "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
+      }
+    ]
+  },
+  {
+    "owner": "이*주",
+    "package": "schedule",
+    "file": "src/teamproject/schedule/SchedulePanel.java",
+    "purpose": "월간 달력·일정 CRUD",
+    "methods": [
+      {
+        "method": "isCellEditable",
+        "line": 25,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "SchedulePanel",
+        "line": 31,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "reload",
+        "line": 84,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "selected",
+        "line": 116,
+        "explanation": "선택 항목을 반환하고 없으면 안내합니다."
+      },
+      {
+        "method": "edit",
+        "line": 125,
+        "explanation": "입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다."
+      },
+      {
+        "method": "delete",
+        "line": 161,
+        "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/ActivityPanel.java",
+    "purpose": "최근 활동 목록 화면",
+    "methods": [
+      {
+        "method": "ActivityPanel",
+        "line": 16,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "reload",
+        "line": 27,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/DashboardPanel.java",
+    "purpose": "기존 진행률·업무·자료 요약",
+    "methods": [
+      {
+        "method": "DashboardPanel",
+        "line": 37,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "isCellEditable",
+        "line": 76,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "isCellEditable",
+        "line": 89,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "reload",
+        "line": 107,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/IdeaCardRenderer.java",
+    "purpose": "아이디어 카드의 표시",
+    "methods": [
+      {
+        "method": "IdeaCardRenderer",
+        "line": 14,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "getListCellRendererComponent",
+        "line": 26,
+        "explanation": "DTO의 값을 라벨에 넣고 카드 패널을 반환합니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/IdeaDAO.java",
+    "purpose": "게시물·댓글·공감 SQL",
+    "methods": [
+      {
+        "method": "Idea",
+        "line": 17,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "toString",
+        "line": 36,
+        "explanation": "목록·선택창에 보이는 대표 문자열을 반환합니다."
+      },
+      {
+        "method": "list",
+        "line": 41,
+        "explanation": "현재 팀 목록을 SQL로 조회하여 DTO 목록을 만듭니다."
+      },
+      {
+        "method": "save",
+        "line": 67,
+        "explanation": "입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다."
+      },
+      {
+        "method": "delete",
+        "line": 103,
+        "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
+      },
+      {
+        "method": "requireIdea",
+        "line": 114,
+        "explanation": "선택 게시물이 현재 팀 소속인지 검사합니다."
+      },
+      {
+        "method": "comments",
+        "line": 125,
+        "explanation": "현재 팀 게시물의 댓글을 순서대로 읽습니다."
+      },
+      {
+        "method": "comment",
+        "line": 142,
+        "explanation": "댓글 입력을 검사하고 댓글·활동을 함께 저장합니다."
+      },
+      {
+        "method": "toggleLike",
+        "line": 168,
+        "explanation": "기존 공감 삭제, 없었다면 등록하는 토글입니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/IdeaPanel.java",
+    "purpose": "아이디어 카드·댓글 입력·5초 갱신",
+    "methods": [
+      {
+        "method": "IdeaPanel",
+        "line": 24,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "addNotify",
+        "line": 87,
+        "explanation": "패널이 화면에 붙으면 자동 갱신 타이머를 시작합니다."
+      },
+      {
+        "method": "removeNotify",
+        "line": 93,
+        "explanation": "화면에서 떨어지면 타이머를 중지합니다."
+      },
+      {
+        "method": "reload",
+        "line": 98,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "doInBackground",
+        "line": 103,
+        "explanation": "백그라운드에서 DB 연결·조회만 수행합니다."
+      },
+      {
+        "method": "done",
+        "line": 109,
+        "explanation": "배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다."
+      },
+      {
+        "method": "selected",
+        "line": 128,
+        "explanation": "선택 항목을 반환하고 없으면 안내합니다."
+      },
+      {
+        "method": "showDetail",
+        "line": 134,
+        "explanation": "선택 게시물과 댓글을 오른쪽에 표시합니다."
+      },
+      {
+        "method": "edit",
+        "line": 158,
+        "explanation": "입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다."
+      },
+      {
+        "method": "delete",
+        "line": 195,
+        "explanation": "현재 팀과 식별 조건에 맞는 행만 삭제합니다."
+      },
+      {
+        "method": "like",
+        "line": 209,
+        "explanation": "선택 게시물 공감을 토글하고 목록을 갱신합니다."
+      },
+      {
+        "method": "comment",
+        "line": 220,
+        "explanation": "댓글 입력을 검사하고 댓글·활동을 함께 저장합니다."
+      },
+      {
+        "method": "openLink",
+        "line": 233,
+        "explanation": "허용된 참고 링크를 브라우저로 엽니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/MainFrame.java",
+    "purpose": "9개 탭 생성·같은 사용자와 팀 전달",
+    "methods": [
+      {
+        "method": "MainFrame",
+        "line": 21,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/MaterialDAO.java",
+    "purpose": "자료 링크 SQL·업로더 저장",
+    "methods": [
+      {
+        "method": "MaterialInfo",
+        "line": 22,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "getMaterialId",
+        "line": 31,
+        "explanation": "객체가 보관한 MaterialId 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getTitle",
+        "line": 35,
+        "explanation": "객체가 보관한 Title 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getDescription",
+        "line": 39,
+        "explanation": "객체가 보관한 Description 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getUrl",
+        "line": 43,
+        "explanation": "객체가 보관한 Url 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "getCreatedAt",
+        "line": 47,
+        "explanation": "객체가 보관한 CreatedAt 값을 반환합니다. DB를 바꾸지 않습니다."
+      },
+      {
+        "method": "loadMaterials",
+        "line": 54,
+        "explanation": "현재 팀 자료를 표에 넣고 이전 링크 컬럼도 호환합니다."
+      },
+      {
+        "method": "getRecentMaterials",
+        "line": 83,
+        "explanation": "현재 팀 최신 자료를 제한 개수만 반환합니다."
+      },
+      {
+        "method": "insertMaterial",
+        "line": 113,
+        "explanation": "로그인한 업로더와 링크를 현재 팀 자료로 저장합니다."
+      },
+      {
+        "method": "findMaterial",
+        "line": 140,
+        "explanation": "현재 팀 자료 한 건 또는 null을 반환합니다."
+      },
+      {
+        "method": "updateMaterial",
+        "line": 162,
+        "explanation": "같은 팀 자료의 제목·내용·링크를 바꿉니다."
+      },
+      {
+        "method": "deleteMaterial",
+        "line": 182,
+        "explanation": "같은 팀 자료를 삭제합니다."
+      }
+    ]
+  },
+  {
+    "owner": "신*준",
+    "package": "resource",
+    "file": "src/teamproject/resource/MaterialPanel.java",
+    "purpose": "자료 표·입력·브라우저 열기",
+    "methods": [
+      {
+        "method": "MaterialPanel",
+        "line": 32,
+        "explanation": "필드와 화면 부품·이벤트를 초기화하는 생성자입니다."
+      },
+      {
+        "method": "isCellEditable",
+        "line": 43,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "mouseClicked",
+        "line": 73,
+        "explanation": "내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요."
+      },
+      {
+        "method": "reload",
+        "line": 83,
+        "explanation": "DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다."
+      },
+      {
+        "method": "getSelectedMaterialId",
+        "line": 91,
+        "explanation": "표의 실제 자료 번호를 읽습니다."
+      },
+      {
+        "method": "registerMaterial",
+        "line": 97,
+        "explanation": "자료 입력창→DAO 등록→목록 갱신입니다."
+      },
+      {
+        "method": "updateMaterial",
+        "line": 111,
+        "explanation": "같은 팀 자료의 제목·내용·링크를 바꿉니다."
+      },
+      {
+        "method": "deleteMaterial",
+        "line": 144,
+        "explanation": "같은 팀 자료를 삭제합니다."
+      },
+      {
+        "method": "openSelectedUrl",
+        "line": 165,
+        "explanation": "선택한 주소를 기본 브라우저로 엽니다."
+      },
+      {
+        "method": "showMaterialDialog",
+        "line": 194,
+        "explanation": "자료 제목·주소 필수값과 길이를 검사합니다."
+      }
+    ]
+  }
+]
