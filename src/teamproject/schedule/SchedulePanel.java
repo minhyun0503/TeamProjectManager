@@ -93,28 +93,45 @@ public class SchedulePanel extends JPanel {
       schedules = nextSchedules;
       deadlines = nextDeadlines;
       monthLabel.setText(month.toString());
-      model.setRowCount(0);
-      calendar.removeAll();
-
-      int offset = month.atDay(1).getDayOfWeek().getValue() - 1;
-      for (int i = 0; i < offset; i++) calendar.add(new JLabel(""));
-      for (int day = 1; day <= month.lengthOfMonth(); day++) {
-        LocalDate date = month.atDay(day);
-        JTextArea cell = new JTextArea(dayText(date, schedules, deadlines));
-        cell.setEditable(false);
-        cell.setLineWrap(true);
-        cell.setWrapStyleWord(true);
-        cell.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        if (date.equals(LocalDate.now())) cell.setBackground(new Color(230, 240, 255));
-        calendar.add(new JScrollPane(cell));
-      }
-      while (calendar.getComponentCount() % 7 != 0) calendar.add(new JLabel(""));
-      for (ScheduleDAO.Schedule s : schedules)
-        model.addRow(new Object[] {s.id, s.title, s.start, s.end, s.memo});
-      calendar.revalidate();
-      calendar.repaint();
+      drawCalendar();
+      fillScheduleTable();
     } catch (Exception e) {
       JOptionPane.showMessageDialog(this, e.getMessage());
+    }
+  }
+
+  private void drawCalendar() {
+    calendar.removeAll();
+    // 월요일은 1, 일요일은 7입니다. 목요일이 첫날이면 앞 세 칸을 비웁니다.
+    int emptyCellsBeforeFirstDay = month.atDay(1).getDayOfWeek().getValue() - 1;
+    for (int i = 0; i < emptyCellsBeforeFirstDay; i++) {
+      calendar.add(new JLabel(""));
+    }
+    LocalDate today = LocalDate.now();
+    for (int day = 1; day <= month.lengthOfMonth(); day++) {
+      LocalDate date = month.atDay(day);
+      JTextArea cell = new JTextArea(dayText(date, schedules, deadlines));
+      cell.setEditable(false);
+      cell.setLineWrap(true);
+      cell.setWrapStyleWord(true);
+      cell.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+      if (date.equals(today)) {
+        cell.setBackground(new Color(230, 240, 255));
+      }
+      calendar.add(new JScrollPane(cell));
+    }
+    while (calendar.getComponentCount() % 7 != 0) {
+      calendar.add(new JLabel(""));
+    }
+    calendar.revalidate();
+    calendar.repaint();
+  }
+
+  private void fillScheduleTable() {
+    model.setRowCount(0);
+    for (ScheduleDAO.Schedule schedule : schedules) {
+      model.addRow(
+          new Object[] {schedule.id, schedule.title, schedule.start, schedule.end, schedule.memo});
     }
   }
 

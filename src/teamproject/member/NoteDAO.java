@@ -63,54 +63,28 @@ public class NoteDAO {
   public static boolean save(
       Connection conn, int teamId, int userId, int id, int version, String title, String content)
       throws SQLException {
-    if (title.isBlank() || title.length() > 100) throw new SQLException("제목은 1~100자로 입력하세요.");
+    if (title.isBlank() || title.length() > 100) {
+      throw new SQLException("제목은 1~100자로 입력하세요.");
+    }
     TeamDAO.requireMember(conn, teamId, userId);
     conn.setAutoCommit(false);
     try {
+      int savedId = id;
+      int savedVersion;
       if (id == 0) {
-        String sql =
-            "INSERT INTO notes (team_id,title,content,author_id,updated_by) VALUES (?,?,?,?,?)";
-        try (PreparedStatement p = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-          p.setInt(1, teamId);
-          p.setString(2, title);
-          p.setString(3, content);
-          p.setInt(4, userId);
-          p.setInt(5, userId);
-          p.executeUpdate();
-          try (ResultSet rs = p.getGeneratedKeys()) {
-            rs.next();
-            id = rs.getInt(1);
-          }
-        }
-        version = 1;
+        savedId = insertNote(conn, teamId, userId, title, content);
+        savedVersion = 1;
       } else {
-        String sql =
-            "UPDATE notes SET"
-                + " title=?,content=?,updated_by=?,version=version+1,updated_at=CURRENT_TIMESTAMP"
-                + " WHERE note_id=? AND team_id=? AND version=?";
-        try (PreparedStatement p = conn.prepareStatement(sql)) {
-          p.setString(1, title);
-          p.setString(2, content);
-          p.setInt(3, userId);
-          p.setInt(4, id);
-          p.setInt(5, teamId);
-          p.setInt(6, version);
-          if (p.executeUpdate() == 0) {
-            conn.rollback();
-            return false;
-          }
+        boolean updated = updateNote(conn, teamId, userId, id, version, title, content);
+        if (!updated) {
+          conn.rollback();
+          return false;
         }
-        version++;
+        savedVersion = version + 1;
       }
-      try (PreparedStatement p =
-          conn.prepareStatement(
-              "INSERT INTO note_history (note_id,version,content,editor_id) VALUES (?,?,?,?)")) {
-        p.setInt(1, id);
-        p.setInt(2, version);
-        p.setString(3, content);
-        p.setInt(4, userId);
-        p.executeUpdate();
-      }
+
+      // 메모 본문, 변경 이력, 활동 기록을 함께 확정합니다.
+      insertHistory(conn, savedId, savedVersion, content, userId);
       ActivityDAO.record(conn, teamId, userId, "공유 메모 저장: " + title);
       conn.commit();
       return true;
@@ -119,6 +93,58 @@ public class NoteDAO {
       throw e;
     } finally {
       conn.setAutoCommit(true);
+    }
+  }
+
+  private static int insertNote(
+      Connection conn, int teamId, int userId, String title, String content) throws SQLException {
+    String sql =
+        "INSERT INTO notes (team_id,title,content,author_id,updated_by) VALUES (?,?,?,?,?)";
+    try (PreparedStatement p = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+      p.setInt(1, teamId);
+      p.setString(2, title);
+      p.setString(3, content);
+      p.setInt(4, userId);
+      p.setInt(5, userId);
+      p.executeUpdate();
+      try (ResultSet result = p.getGeneratedKeys()) {
+        if (result.next()) {
+          return result.getInt(1);
+        }
+        throw new SQLException("새 메모의 번호를 가져오지 못했습니다.");
+      }
+    }
+  }
+
+  private static boolean updateNote(
+      Connection conn, int teamId, int userId, int id, int version, String title, String content)
+      throws SQLException {
+    String sql =
+        """
+        UPDATE notes
+        SET title=?, content=?, updated_by=?, version=version+1, updated_at=CURRENT_TIMESTAMP
+        WHERE note_id=? AND team_id=? AND version=?
+        """;
+    try (PreparedStatement p = conn.prepareStatement(sql)) {
+      p.setString(1, title);
+      p.setString(2, content);
+      p.setInt(3, userId);
+      p.setInt(4, id);
+      p.setInt(5, teamId);
+      p.setInt(6, version);
+      return p.executeUpdate() > 0;
+    }
+  }
+
+  private static void insertHistory(
+      Connection conn, int noteId, int version, String content, int userId) throws SQLException {
+    String sql = "INSERT INTO note_history (note_id,version,content,editor_id) VALUES (?,?,?,?)";
+    try (PreparedStatement p = conn.prepareStatement(sql)) {
+      p.setInt(1, noteId);
+      p.setInt(2, version);
+      p.setString(3, content);
+      p.setInt(4, userId);
+      p.executeUpdate();
     }
   }
 

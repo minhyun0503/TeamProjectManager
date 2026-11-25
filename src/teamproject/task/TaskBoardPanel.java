@@ -37,9 +37,10 @@ public class TaskBoardPanel extends JPanel {
       lists.add(list);
       list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       list.addListSelectionListener(
-          e -> {
-            if (!e.getValueIsAdjusting() && list.getSelectedValue() != null)
-              for (JList<TaskDAO.Card> other : lists) if (other != list) other.clearSelection();
+          event -> {
+            if (!event.getValueIsAdjusting() && list.getSelectedValue() != null) {
+              clearOtherSelections(list);
+            }
           });
       JPanel column = new JPanel(new BorderLayout());
       column.setBorder(BorderFactory.createTitledBorder(status));
@@ -59,22 +60,44 @@ public class TaskBoardPanel extends JPanel {
     reload();
   }
 
+  private void clearOtherSelections(JList<TaskDAO.Card> selectedList) {
+    for (JList<TaskDAO.Card> list : lists) {
+      if (list != selectedList) {
+        list.clearSelection();
+      }
+    }
+  }
+
   public void reload() {
     try {
-      for (DefaultListModel<TaskDAO.Card> model : models) model.clear();
-      for (TaskDAO.Card card : TaskDAO.board(conn, teamId, userId, mine.isSelected())) {
-        for (int i = 0; i < TaskDAO.STATUS_LIST.length; i++)
-          if (TaskDAO.STATUS_LIST[i].equals(card.status)) models.get(i).addElement(card);
+      List<TaskDAO.Card> cards = TaskDAO.board(conn, teamId, userId, mine.isSelected());
+      for (int column = 0; column < TaskDAO.STATUS_LIST.length; column++) {
+        String columnStatus = TaskDAO.STATUS_LIST[column];
+        DefaultListModel<TaskDAO.Card> model = models.get(column);
+        model.clear();
+        for (TaskDAO.Card card : cards) {
+          if (columnStatus.equals(card.status)) {
+            model.addElement(card);
+          }
+        }
       }
     } catch (Exception e) {
       JOptionPane.showMessageDialog(this, e.getMessage());
     }
   }
 
+  private TaskDAO.Card findSelectedCard() {
+    for (JList<TaskDAO.Card> list : lists) {
+      TaskDAO.Card card = list.getSelectedValue();
+      if (card != null) {
+        return card;
+      }
+    }
+    return null;
+  }
+
   private void move(String status) {
-    TaskDAO.Card selected = null;
-    for (JList<TaskDAO.Card> list : lists)
-      if (list.getSelectedValue() != null) selected = list.getSelectedValue();
+    TaskDAO.Card selected = findSelectedCard();
     if (selected == null) {
       JOptionPane.showMessageDialog(this, "변경할 업무 카드를 선택하세요.");
       return;

@@ -96,33 +96,51 @@ public class IdeaPanel extends JPanel {
   }
 
   public void reload() {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
     loading = true;
-    new SwingWorker<List<IdeaDAO.Idea>, Void>() {
-      protected List<IdeaDAO.Idea> doInBackground() throws Exception {
-        try (Connection read = DB_connection.open()) {
-          return IdeaDAO.list(read, teamId);
-        }
-      }
+    new IdeaListWorker().execute();
+  }
 
-      protected void done() {
-        try {
-          List<IdeaDAO.Idea> ideas = get();
-          if (!isDisplayable()) return;
-          int selectedId = list.getSelectedValue() == null ? -1 : list.getSelectedValue().id;
-          model.clear();
-          for (IdeaDAO.Idea idea : ideas) {
-            model.addElement(idea);
-            if (idea.id == selectedId) list.setSelectedValue(idea, true);
-          }
-          status.setText("자동 갱신 완료 · " + ideas.size() + "개 아이디어 · 공감은 한 사람당 한 번");
-        } catch (Exception e) {
-          status.setText("갱신 실패 · 연결을 확인한 뒤 새로고침하세요.");
-        } finally {
-          loading = false;
-        }
+  private class IdeaListWorker extends SwingWorker<List<IdeaDAO.Idea>, Void> {
+    @Override
+    protected List<IdeaDAO.Idea> doInBackground() throws Exception {
+      try (Connection readConnection = DB_connection.open()) {
+        return IdeaDAO.list(readConnection, teamId);
       }
-    }.execute();
+    }
+
+    @Override
+    protected void done() {
+      try {
+        List<IdeaDAO.Idea> ideas = get();
+        if (isDisplayable()) {
+          updateList(ideas);
+        }
+      } catch (Exception e) {
+        status.setText("갱신 실패 · 연결을 확인한 뒤 새로고침하세요.");
+      } finally {
+        loading = false;
+      }
+    }
+  }
+
+  private void updateList(List<IdeaDAO.Idea> ideas) {
+    // 조회가 시작된 때가 아니라 화면을 바꾸기 직전의 선택을 기억합니다.
+    IdeaDAO.Idea selectedItem = list.getSelectedValue();
+    IdeaDAO.Idea itemToSelect = null;
+    model.clear();
+    for (IdeaDAO.Idea idea : ideas) {
+      model.addElement(idea);
+      if (selectedItem != null && selectedItem.id == idea.id) {
+        itemToSelect = idea;
+      }
+    }
+    if (itemToSelect != null) {
+      list.setSelectedValue(itemToSelect, true);
+    }
+    status.setText("자동 갱신 완료 · " + ideas.size() + "개 아이디어 · 공감은 한 사람당 한 번");
   }
 
   private IdeaDAO.Idea selected() {

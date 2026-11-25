@@ -81,33 +81,51 @@ public class NotePanel extends JPanel {
 
   // doInBackground는 SQL만, done은 Swing 화면만 처리합니다.
   public void reload() {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
     loading = true;
-    new SwingWorker<List<NoteDAO.Note>, Void>() {
-      protected List<NoteDAO.Note> doInBackground() throws Exception {
-        try (Connection read = DB_connection.open()) {
-          return NoteDAO.list(read, teamId);
-        }
-      }
+    new NoteListWorker().execute();
+  }
 
-      protected void done() {
-        try {
-          List<NoteDAO.Note> notes = get();
-          if (!isDisplayable()) return;
-          int selectedId = list.getSelectedValue() == null ? -1 : list.getSelectedValue().id;
-          model.clear();
-          for (NoteDAO.Note n : notes) {
-            model.addElement(n);
-            if (n.id == selectedId) list.setSelectedValue(n, true);
-          }
-          status.setText("자동 갱신 완료 · " + notes.size() + "개 메모 · 갱신 간격 3초");
-        } catch (Exception e) {
-          status.setText("갱신 실패 · 연결을 확인한 뒤 새로고침하세요.");
-        } finally {
-          loading = false;
-        }
+  private class NoteListWorker extends SwingWorker<List<NoteDAO.Note>, Void> {
+    @Override
+    protected List<NoteDAO.Note> doInBackground() throws Exception {
+      try (Connection readConnection = DB_connection.open()) {
+        return NoteDAO.list(readConnection, teamId);
       }
-    }.execute();
+    }
+
+    @Override
+    protected void done() {
+      try {
+        List<NoteDAO.Note> notes = get();
+        if (isDisplayable()) {
+          updateList(notes);
+        }
+      } catch (Exception e) {
+        status.setText("갱신 실패 · 연결을 확인한 뒤 새로고침하세요.");
+      } finally {
+        loading = false;
+      }
+    }
+  }
+
+  private void updateList(List<NoteDAO.Note> notes) {
+    // 조회가 시작된 때가 아니라 화면을 바꾸기 직전의 선택을 기억합니다.
+    NoteDAO.Note selectedItem = list.getSelectedValue();
+    NoteDAO.Note itemToSelect = null;
+    model.clear();
+    for (NoteDAO.Note note : notes) {
+      model.addElement(note);
+      if (selectedItem != null && selectedItem.id == note.id) {
+        itemToSelect = note;
+      }
+    }
+    if (itemToSelect != null) {
+      list.setSelectedValue(itemToSelect, true);
+    }
+    status.setText("자동 갱신 완료 · " + notes.size() + "개 메모 · 갱신 간격 3초");
   }
 
   private NoteDAO.Note selected() {
