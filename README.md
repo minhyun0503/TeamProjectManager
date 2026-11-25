@@ -1,5 +1,7 @@
 # 팀프로젝트 관리 프로그램 — 피드백 반영·브리핑 학습 버전
 
+**Codex에서 이어서 개발하기** · [인수인계](HANDOFF.md) · [개발 규칙](AGENTS.md)
+
 **파일을 열어 하나씩 설명하는 브리핑은 [팀원별 소스 브리핑](docs/member_briefings/README.md)을 사용하세요.** 개인 HTML에는 전체 코드·줄 강조·구간별 설명, 개인 PDF에는 같은 설명을 담았습니다.
 
 인터페이스까지 배운 조원은 [코드 난이도 판단과 변경 내역](docs/member_briefings/validation.md)을 보고 개인 자료의 실행 예제를 따라가세요.
