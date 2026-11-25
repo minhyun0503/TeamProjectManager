@@ -16,6 +16,8 @@ private은 클래스 내부에서 사용, public은 다른 클래스에서도 �
 
 this는 현재 객체, null은 가리키는 객체가 없음입니다. <자료형>은 목록 등에 넣을 값의 종류, 조건 ? A : B는 참일 때 A·거짓일 때 B를 고르는 문법입니다.
 
+implements는 인터페이스가 요구하는 메서드를 작성하겠다는 뜻입니다. Swing에 리스너 객체를 등록하면 버튼이나 탭의 변화가 있을 때 그 메서드가 호출됩니다.
+
 e -> 동작은 이벤트가 생겼을 때 실행할 짧은 함수를 연결하는 문법입니다. return은 현재 메서드를 끝내고, throw는 오류를 호출한 곳으로 전달합니다.
 
 java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JList·Connection은 그 안의 클래스입니다. java.util·java.time은 java.base 안의 패키지입니다.
@@ -32,28 +34,34 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 | ResultSet | DB 조회 결과입니다. next()로 다음 결과 행에 이동합니다. |
 | SwingWorker | DB 배경 작업과 완료 후 화면 처리를 나눕니다. |
 
+## 예제 값으로 실행 따라가기
+
+1. 로컬 데모를 고르면 mode=0, demo=true가 됩니다. start에서 데모 주소를 지정하고 대기창을 먼저 표시합니다.
+2. DatabaseStartupWorker의 doInBackground가 빈 DB에 표와 예제 자료를 준비하고 Connection을 반환합니다.
+3. done에서 받은 연결을 LoginFrame에 전달합니다. 연습 질문은 MySQL 정보 입력에서 취소하면 작업 객체를 만드는 줄까지 가는지입니다. false를 받아 start에서 return합니다.
+
 ## 1. Main.java
 
-[src/teamproject/common/Main.java](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/Main.java#L1)
+[src/teamproject/common/Main.java](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L1)
 
 프로그램의 시작점. 실행 방식을 고르고 DB 준비가 끝나면 로그인 창을 엽니다.
 
 먼저 볼 변수·인수: args는 시작 인수, mode는 실행 방식(0=로컬 데모), demo는 데모 자료를 넣을지 나타내는 참·거짓 값입니다.
 
-실행 흐름: main → start → DB_connection.configure → doInBackground → SchemaSetup.initialize → done → LoginFrame
+실행 흐름: main → start → DB 설정 → 대기창 → DatabaseStartupWorker → LoginFrame
 
 실행 예: 로컬 데모를 고르면 사용자 홈 폴더에 파일 DB를 준비합니다. 이미 저장된 데이터는 다음 실행에도 남습니다.
 
 ### 상단 선언과 모듈 · 1~10줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/Main.java#L1) · 실행·읽기 시점: 파일을 처음 열 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L1) · 실행·읽기 시점: 파일을 처음 열 때
 
 1. package는 이 파일이 속한 묶음입니다. Files·Path는 폴더와 경로, Connection은 DB 연결, javax.swing은 화면을 만드는 클래스입니다.
 2. import는 필요한 클래스의 짧은 이름을 쓰게 하는 선언입니다. 가져온 것만으로 DB 연결이나 창 생성이 실행되지는 않습니다.
 
 ### main: 가장 먼저 실행 · 11~16줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/Main.java#L11) · 실행·읽기 시점: 자바가 프로그램을 시작할 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L11) · 실행·읽기 시점: 자바가 프로그램을 시작할 때
 
 1. static 메서드여서 Main 객체를 따로 만들지 않고 실행됩니다.
 2. SwingUtilities.invokeLater(Main::start)는 화면을 다루는 전용 실행 흐름인 EDT에 start 실행을 맡깁니다. Main::start는 실행할 메서드를 가리킵니다.
@@ -62,46 +70,74 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 > **EDT**: Swing 화면과 사용자 입력 처리를 담당하는 전용 실행 흐름입니다. 오래 걸리는 작업을 여기서 계속하면 화면 반응이 늦어집니다.
 
-### start 앞부분: 실행 방식 선택 · 17~59줄
+### 실행 방식 선택 · 17~46줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/Main.java#L17) · 실행·읽기 시점: main이 시작 작업을 맡기면
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L17) · 실행·읽기 시점: main이 화면 실행 흐름에 맡긴 작업이 시작되면
 
-1. 선택창의 결과가 음수이면 창을 닫았다는 뜻이므로 return으로 종료합니다.
-2. mode가 0이면 홈 폴더에 저장 위치를 만들고 H2 파일 DB 주소를 configure에 전달합니다. AUTO_SERVER는 같은 컴퓨터의 여러 실행에서 파일 DB를 함께 열도록 하는 H2 설정입니다.
-3. MySQL이면 주소·DB 계정·DB 비밀번호를 받습니다. 이 비밀번호는 프로그램의 demo1234 로그인 비밀번호와 구분합니다. 취소하거나 원본 DB 이름을 입력하면 진행하지 않습니다.
+1. 선택창을 닫으면 mode는 음수입니다. return으로 start를 끝냅니다.
+2. 로컬 데모는 configureDemoDatabase를 호출합니다. MySQL을 고르면 configureMySqlDatabase를 호출하고, false를 돌려받았을 때 취소합니다.
+3. 설정을 마치면 대기창과 DatabaseStartupWorker를 만들고 execute로 DB 준비 작업을 시작합니다.
 
 관련 선언: start (17줄)
 
-### 대기창과 SwingWorker 생성 · 60~70줄
+### 로컬 데모 설정 · 47~56줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/Main.java#L60) · 실행·읽기 시점: DB 주소 설정을 끝내면
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L47) · 실행·읽기 시점: 로컬 데모를 고르면
 
-1. 작업 중임을 보여 주는 JDialog를 열고, X 버튼으로 준비 중인 창을 없애지 못하게 합니다.
-2. SwingWorker는 시간이 걸리는 일을 화면 처리와 나누는 클래스입니다. execute()가 아래의 두 메서드를 정해진 순서로 실행시킵니다.
+1. 홈 폴더 아래에 데모 파일을 둘 위치를 만든 뒤 JDBC 주소를 조립합니다.
+2. configure는 주소·계정을 저장합니다. 연결을 실제로 여는 코드는 doInBackground에 있습니다.
+
+관련 선언: configureDemoDatabase (47줄)
+
+### MySQL 연결 정보 받기 · 57~81줄
+
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L57) · 실행·읽기 시점: MySQL 연결을 고르면
+
+1. 주소·DB 계정·DB 비밀번호를 입력할 창을 엽니다. 여기서 받는 비밀번호는 DB 연결용입니다.
+2. 확인을 누르면 주소를 검사한 뒤 설정을 저장하고 true를 반환합니다. 취소하면 false로 start에 돌아갑니다.
+
+관련 선언: configureMySqlDatabase (57줄)
+
+### 대기창 만들기 · 82~93줄
+
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L82) · 실행·읽기 시점: 연결 정보를 준비한 뒤
+
+1. DB를 준비한다는 문구가 있는 JDialog를 띄우고, 나중에 닫을 수 있도록 그 창을 반환합니다.
+
+관련 선언: showWaitingDialog (82줄)
+
+### DB 준비를 맡은 클래스와 생성자 · 94~103줄
+
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L94) · 실행·읽기 시점: start가 작업을 만들면
+
+1. SwingWorker를 상속하고 demo와 대기창을 필드에 저장합니다. SwingWorker<Connection, Void>에서 Connection은 최종 결과의 자료형이고 Void는 도중 결과를 따로 전송하지 않는다는 뜻입니다.
+2. execute는 부모 클래스 메서드입니다. Swing이 아래에 재정의한 doInBackground와 done을 순서에 맞게 부릅니다.
+
+관련 선언: DatabaseStartupWorker (98줄)
 
 > **SwingWorker**: 느린 작업은 doInBackground에서, 끝난 뒤 화면 변경은 done에서 처리하도록 나누는 클래스입니다.
 
-### doInBackground: 연결과 DB 준비 · 71~81줄
+### DB 연결과 스키마 준비 · 104~115줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/Main.java#L71) · 실행·읽기 시점: SwingWorker가 별도의 작업 흐름에서 호출
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L104) · 실행·읽기 시점: Swing이 별도 실행 흐름에서 호출
 
-1. open으로 DB 연결을 만들고 initialize에 연결과 demo 여부를 넘깁니다.
-2. 정상 완료하면 Connection을 반환합니다. 준비 중 오류가 나면 연결을 닫고 throw로 오류를 위쪽 호출자에게 전달합니다.
+1. DB_connection.open으로 연결하고 SchemaSetup.initialize에 연결과 데모 여부를 넘깁니다.
+2. 정상 완료하면 그 연결을 돌려줍니다. 준비 중 예외가 나면 열린 연결을 닫고 예외를 다시 전달합니다.
 
-관련 선언: doInBackground (71줄)
+관련 선언: doInBackground (104줄)
 
-### done: 준비 결과로 로그인 열기 · 82~95줄
+### 로그인 창 띄우기 · 116~127줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/Main.java#L82) · 실행·읽기 시점: 배경 작업이 끝나면 EDT에서 호출
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/Main.java#L116) · 실행·읽기 시점: 준비 작업이 끝나면 Swing이 화면 실행 흐름에서 호출
 
-1. 대기창을 닫고 get()으로 앞 메서드가 반환한 Connection을 받습니다. 배경 작업의 오류도 get()에서 확인합니다.
-2. 그 연결을 LoginFrame 생성자에 전달하고 setVisible(true)로 창을 보여 줍니다. 바깥 catch는 시작 설정 과정의 오류를 안내합니다.
+1. 대기창을 닫고 get으로 준비 결과를 읽습니다. 배경 작업의 예외도 get에서 전달됩니다.
+2. 정상 결과인 Connection을 LoginFrame에 넘겨 화면을 표시합니다. 준비가 실패했다면 오류 창을 띄웁니다.
 
-관련 선언: done (82줄)
+관련 선언: done (116줄)
 
 ## 2. DB_connection.java
 
-[src/teamproject/common/DB_connection.java](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/DB_connection.java#L1)
+[src/teamproject/common/DB_connection.java](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/DB_connection.java#L1)
 
 접속 정보를 보관하고 필요할 때 새 DB 연결을 만드는 공통 파일입니다.
 
@@ -113,14 +149,14 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### 모듈과 필드 · 1~14줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/DB_connection.java#L1) · 실행·읽기 시점: 클래스를 읽기 시작할 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/DB_connection.java#L1) · 실행·읽기 시점: 클래스를 읽기 시작할 때
 
 1. java.sql 모듈의 Connection·DriverManager·SQLException을 사용합니다.
 2. 접속 문자열 3개를 private static 필드로 둡니다. private은 이 클래스 안에서만 직접 읽고 바꿀 수 있다는 뜻입니다.
 
 ### configure: 설정 저장 · 15~20줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/DB_connection.java#L15) · 실행·읽기 시점: Main에서 실행 방식을 선택한 뒤 호출
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/DB_connection.java#L15) · 실행·읽기 시점: Main에서 실행 방식을 선택한 뒤 호출
 
 1. 받은 jdbcUrl·username·dbPassword를 필드에 대입합니다.
 2. 이 단계는 값만 보관합니다. 실제 연결 시도는 open에서 합니다.
@@ -129,7 +165,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### open: 새 연결 반환 · 21~25줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/DB_connection.java#L21) · 실행·읽기 시점: 시작 준비 또는 자동 조회가 DB 연결을 요청할 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/DB_connection.java#L21) · 실행·읽기 시점: 시작 준비 또는 자동 조회가 DB 연결을 요청할 때
 
 1. DriverManager.getConnection이 주소에 맞는 JDBC 드라이버를 통해 연결합니다. JDBC는 자바가 DB와 통신할 때 사용하는 공통 방식입니다.
 2. Connection을 호출한 곳에 돌려줍니다. 연결 실패는 SQLException으로 전달합니다. 여기서는 SQL을 실행하지 않습니다.
@@ -138,7 +174,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ## 3. SchemaSetup.java
 
-[src/teamproject/common/SchemaSetup.java](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/SchemaSetup.java#L1)
+[src/teamproject/common/SchemaSetup.java](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/SchemaSetup.java#L1)
 
 필요한 표를 준비하고 처음 실행한 로컬 데모에만 가상 자료를 넣습니다.
 
@@ -150,7 +186,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### 모듈과 클래스 역할 · 1~12줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/SchemaSetup.java#L1) · 실행·읽기 시점: 상단부터 읽을 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/SchemaSetup.java#L1) · 실행·읽기 시점: 상단부터 읽을 때
 
 1. InputStream은 파일 내용을 읽고 StandardCharsets.UTF_8은 한글을 올바르게 해석합니다.
 2. Statement는 이 파일에 고정된 SQL을 실행합니다. 사용자 입력을 SQL에 넣는 DAO에서는 PreparedStatement를 사용합니다.
@@ -159,7 +195,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### initialize: 표 구조 준비 · 13~26줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/SchemaSetup.java#L13) · 실행·읽기 시점: Main의 doInBackground에서 호출
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/SchemaSetup.java#L13) · 실행·읽기 시점: Main의 doInBackground에서 호출
 
 1. 같은 패키지의 schema.sql을 자원 파일로 읽습니다. 없으면 즉시 오류를 발생시킵니다.
 2. 현재 스키마 파일의 한 줄 주석을 제거한 뒤 세미콜론으로 나눕니다. 비어 있지 않은 명령을 for 반복문으로 실행합니다. 이 분리 방식은 현재처럼 단순한 SQL 파일을 전제로 합니다.
@@ -169,7 +205,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### seedDemo 앞부분: 중복 자료 방지 · 27~33줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/SchemaSetup.java#L27) · 실행·읽기 시점: 로컬 데모 표 구조를 만든 뒤
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/SchemaSetup.java#L27) · 실행·읽기 시점: 로컬 데모 표 구조를 만든 뒤
 
 1. users 행 수를 읽고 rs.next()로 첫 결과로 이동합니다. 값이 0이 아니면 return하여 기존 자료를 유지합니다.
 2. setAutoCommit(false)는 SQL마다 바로 저장하던 방식을 잠시 끄는 것입니다. 여러 삽입을 트랜잭션으로 묶습니다.
@@ -180,7 +216,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### 가상 자료 삽입과 성공·실패 처리 · 34~72줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/SchemaSetup.java#L34) · 실행·읽기 시점: 아직 회원이 없을 때만
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/SchemaSetup.java#L34) · 실행·읽기 시점: 아직 회원이 없을 때만
 
 1. 회원 → 팀 → 팀 소속 → 업무 → 메모 → 메모 이력 → 일정 → 아이디어 순으로 넣습니다. 참조할 회원·팀이 먼저 있어야 하기 때문입니다.
 2. 트랜잭션은 여러 DB 변경을 한 묶음으로 처리하는 방식입니다. 모두 성공하면 commit으로 확정하고, 하나라도 실패하면 rollback으로 이 묶음을 취소합니다.
@@ -194,7 +230,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ## 4. TeamDAO.java
 
-[src/teamproject/common/TeamDAO.java](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/TeamDAO.java#L1)
+[src/teamproject/common/TeamDAO.java](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/TeamDAO.java#L1)
 
 로그인 회원의 소속 팀 목록을 찾고 저장 요청의 소속을 검사합니다.
 
@@ -206,14 +242,14 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### 모듈과 Team 자료형 · 1~17줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/TeamDAO.java#L1) · 실행·읽기 시점: 파일을 처음 열 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/TeamDAO.java#L1) · 실행·읽기 시점: 파일을 처음 열 때
 
 1. List는 여러 팀을 보관하는 목록의 형식이고 ArrayList는 실제로 항목을 넣는 목록 클래스입니다.
 2. static 내부 클래스 Team은 팀 한 건을 묶어 전달합니다. final 필드는 생성할 때 받은 값을 이후 다시 대입하지 않습니다.
 
 ### Team 생성자와 값 반환 메서드 · 18~36줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/TeamDAO.java#L18) · 실행·읽기 시점: 조회한 팀 한 건을 객체로 만들 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/TeamDAO.java#L18) · 실행·읽기 시점: 조회한 팀 한 건을 객체로 만들 때
 
 1. 생성자는 번호와 이름을 this.teamId·this.teamName에 보관합니다. this는 지금 만들어진 객체를 뜻합니다.
 2. getTeamId는 팀 번호, getTeamName은 팀 이름을 반환합니다. toString은 선택창에 표시할 “팀 이름 (팀 번호)” 문자열입니다. 세 메서드는 DB를 변경하지 않습니다.
@@ -222,7 +258,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### findTeams: 소속 팀 조회 · 37~57줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/TeamDAO.java#L37) · 실행·읽기 시점: 로그인 성공 후 회원 번호를 받으면
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/TeamDAO.java#L37) · 실행·읽기 시점: 로그인 성공 후 회원 번호를 받으면
 
 1. teams와 team_members를 team_id가 같은 행끼리 JOIN합니다. JOIN은 여러 표의 관련 행을 이어서 읽는 SQL 기능입니다.
 2. WHERE의 ?에 로그인한 userId를 넣고 executeQuery로 조회합니다. setInt(1, userId)의 1은 첫 번째 ?의 위치입니다.
@@ -234,7 +270,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### requireMember: 현재 팀 소속 검사 · 58~69줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/TeamDAO.java#L58) · 실행·읽기 시점: 메모·일정·아이디어 저장 등이 요청되면
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/TeamDAO.java#L58) · 실행·읽기 시점: 메모·일정·아이디어 저장 등이 요청되면
 
 1. 팀 번호와 회원 번호 두 조건으로 team_members를 찾습니다. SELECT 1은 전체 정보를 가져오는 대신 존재 여부만 확인하려는 것입니다.
 2. 한 행도 없으면 SQLException을 발생시켜 저장을 중단합니다. 행이 있으면 별도 반환값 없이 정상 종료합니다.
@@ -243,7 +279,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ## 5. ActivityDAO.java
 
-[src/teamproject/common/ActivityDAO.java](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/ActivityDAO.java#L1)
+[src/teamproject/common/ActivityDAO.java](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/ActivityDAO.java#L1)
 
 메모·일정·아이디어 관련 활동 문장을 저장하고 최근 30개를 조회합니다.
 
@@ -255,14 +291,14 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### 모듈과 책임 범위 · 1~10줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/ActivityDAO.java#L1) · 실행·읽기 시점: 파일을 열면
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/ActivityDAO.java#L1) · 실행·읽기 시점: 파일을 열면
 
 1. java.sql로 DB 작업을 하고 List·ArrayList로 최근 활동 문장들을 반환합니다.
 2. 최근 활동은 지정한 동작만 기록합니다. 모든 업무·팀원 변경이나 삭제를 전부 추적하는 기능은 아닙니다.
 
 ### record: 활동 한 건 저장 · 11~21줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/ActivityDAO.java#L11) · 실행·읽기 시점: 호출한 DAO가 변경을 처리하는 도중
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/ActivityDAO.java#L11) · 실행·읽기 시점: 호출한 DAO가 변경을 처리하는 도중
 
 1. teamId·userId·action을 첫째부터 셋째 ?에 채워 activity_log에 삽입합니다.
 2. executeUpdate로 한 행을 추가합니다. commit·rollback은 이 메서드를 부른 DAO가 결정하므로 원래 변경과 함께 성공·취소할 수 있습니다.
@@ -277,7 +313,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### recent: 최근 목록 조회 · 22~36줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/ActivityDAO.java#L22) · 실행·읽기 시점: 최근 활동 화면에서 새로고침하면
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/ActivityDAO.java#L22) · 실행·읽기 시점: 최근 활동 화면에서 새로고침하면
 
 1. activity_log와 users를 이어 사용자 이름까지 읽고 현재 팀으로 제한합니다.
 2. activity_id 내림차순은 큰 번호부터, LIMIT 30은 최대 30행입니다. 각 행을 “시간 | 이름 | 활동” 문자열로 만들어 목록으로 돌려줍니다.
@@ -286,7 +322,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ## 6. module-info.java
 
-[src/module-info.java](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/module-info.java#L1)
+[src/module-info.java](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/module-info.java#L1)
 
 프로그램이 사용하는 자바 모듈을 선언합니다.
 
@@ -298,7 +334,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### 모듈 선언 전체 · 1~6줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/module-info.java#L1) · 실행·읽기 시점: Eclipse에서 module-info.java를 열 때
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/module-info.java#L1) · 실행·읽기 시점: Eclipse에서 module-info.java를 열 때
 
 1. java.sql은 JDBC의 Connection·PreparedStatement·ResultSet 등을 제공합니다.
 2. java.desktop은 Swing 화면과 AWT의 배치·색·브라우저 연동 등을 제공합니다. JList는 모듈 자체가 아니라 java.desktop 안의 클래스입니다.
@@ -306,7 +342,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ## 7. schema.sql
 
-[src/teamproject/common/schema.sql](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/schema.sql#L1)
+[src/teamproject/common/schema.sql](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/schema.sql#L1)
 
 각 기능이 함께 쓰는 DB 표와 연결 관계를 정의합니다.
 
@@ -318,28 +354,28 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### users: 사용자 계정 · 1~10줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/schema.sql#L1) · 실행·읽기 시점: 첫 표부터 읽기
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/schema.sql#L1) · 실행·읽기 시점: 첫 표부터 읽기
 
 1. user_id는 내부 회원 번호, login_id는 로그인 문자열, student_no는 별도 학번입니다. 같은 값이라고 가정하지 않습니다.
 2. NOT NULL은 필수값, UNIQUE는 중복 금지입니다. CREATE TABLE IF NOT EXISTS는 없는 표만 만들며 기존 표를 자동으로 변환하지 않습니다.
 
 ### teams와 team_members: 팀과 소속 · 11~31줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/schema.sql#L11) · 실행·읽기 시점: 계정 표 다음
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/schema.sql#L11) · 실행·읽기 시점: 계정 표 다음
 
 1. teams는 팀 자체를 저장하고 leader_id로 회원을 참조합니다. team_members는 한 회원이 어느 팀에 속하는지와 역할을 저장합니다.
 2. 소속의 기본키는 (team_id,user_id) 두 값의 조합입니다. 같은 팀·회원 조합을 두 번 넣을 수 없지만 같은 회원이 여러 팀에 속할 수 있습니다.
 
 ### tasks와 schedules: 업무·별도 일정 · 32~56줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/schema.sql#L32) · 실행·읽기 시점: 팀 구조 다음
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/schema.sql#L32) · 실행·읽기 시점: 팀 구조 다음
 
 1. tasks는 담당자·상태·하나의 마감일을 저장합니다. schedules는 시작일·종료일을 가진 별도 일정입니다.
 2. 달력은 두 표를 함께 조회합니다. 업무를 일정 표에 복사하지 않으므로 마감일을 바꿔도 옛 일정이 남지 않습니다.
 
 ### materials: 자료 링크 · 57~71줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/schema.sql#L57) · 실행·읽기 시점: 자료 관리 기능의 저장 구조
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/schema.sql#L57) · 실행·읽기 시점: 자료 관리 기능의 저장 구조
 
 1. 자료 번호·소속 팀·제목·설명·주소·등록자를 저장합니다. 파일 자체를 업로드하는 표는 아닙니다.
 2. url은 현재 주소, link_url은 이전 주소를 보존하는 열입니다. MaterialDAO가 현재 주소가 없을 때 이전 주소를 읽습니다.
@@ -348,7 +384,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### notes·note_history·task_notes: 메모와 연결 · 72~93줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/schema.sql#L72) · 실행·읽기 시점: 공유 메모 관련 표
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/schema.sql#L72) · 실행·읽기 시점: 공유 메모 관련 표
 
 1. notes.version은 수정할 때 1씩 늘립니다. 화면에서 읽은 버전과 DB 버전이 같은 경우만 수정하여 다른 사람의 변경을 덮어쓰지 않습니다.
 2. note_history는 (메모 번호,버전)마다 당시 내용을 저장합니다. task_notes는 생성된 업무와 원문 메모의 번호를 연결합니다.
@@ -358,7 +394,7 @@ java.desktop은 Swing·화면 배치, java.sql은 DB 통신 모듈입니다. JLi
 
 ### ideas·댓글·공감·활동: 협업 자료 · 94~121줄
 
-[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/1beec761ec6fac0d1a6b4eb4e19694740fb5e583/src/teamproject/common/schema.sql#L94) · 실행·읽기 시점: 마지막 표들
+[코드 위치](https://github.com/minhyun0503/TeamProjectManager/blob/347d21cb4d48ef80c333af9ae4da02395f618765/src/teamproject/common/schema.sql#L94) · 실행·읽기 시점: 마지막 표들
 
 1. ideas에는 본문, idea_comments에는 댓글, idea_reactions에는 공감한 사람을 각각 저장합니다.
 2. 공감의 기본키가 (idea_id,user_id)이므로 한 사람이 같은 글에 중복 공감을 남기지 못합니다. activity_log는 동작 문장과 작성 시각을 저장합니다.
@@ -379,4 +415,4 @@ Main을 실행해 로컬 데모를 고르고, DB 준비가 끝나 로그인 창�
 
 아니요. IF NOT EXISTS는 없는 표만 만듭니다. 기존 구조 변경은 별도 SQL이 필요합니다.
 
-소스 기준 커밋: 1beec761ec6fac0d1a6b4eb4e19694740fb5e583. 줄 번호는 이 기준의 실제 파일과 일치합니다.
+소스 기준 커밋: 347d21cb4d48ef80c333af9ae4da02395f618765. 줄 번호는 이 기준의 실제 파일과 일치합니다.

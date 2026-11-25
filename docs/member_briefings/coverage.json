@@ -1,13 +1,13 @@
 {
-  "source_commit": "1beec761ec6fac0d1a6b4eb4e19694740fb5e583",
+  "source_commit": "347d21cb4d48ef80c333af9ae4da02395f618765",
   "files": [
     {
       "file": "src/teamproject/common/Main.java",
       "owner": "장*민",
-      "sha256": "baef6cb740de93a1263dcccc89690e0c3a0021bffad8176e6692ae61e42f9509",
-      "lines": 95,
-      "sections": 6,
-      "declarations": 4
+      "sha256": "35e3c6e6320c24c3059c44d4414ba3016836a6d057d5c1af28f987a5be3d9728",
+      "lines": 127,
+      "sections": 9,
+      "declarations": 8
     },
     {
       "file": "src/teamproject/common/DB_connection.java",
@@ -92,18 +92,18 @@
     {
       "file": "src/teamproject/member/NotePanel.java",
       "owner": "이*찬",
-      "sha256": "33414e2ee26cee6363129b4b6e8c1b54c746da22f88c64ab47776989928d5d95",
-      "lines": 180,
-      "sections": 9,
-      "declarations": 10
+      "sha256": "e6c1c762d182233f0597572c7c3ee93903a52617eba874e9c421dca31eee0e26",
+      "lines": 198,
+      "sections": 11,
+      "declarations": 11
     },
     {
       "file": "src/teamproject/member/NoteDAO.java",
       "owner": "이*찬",
-      "sha256": "2b7bd3ecf14461375bc2f7286c497c7e1a56f9b15df5315359e2d3acd3236ff1",
-      "lines": 160,
-      "sections": 8,
-      "declarations": 6
+      "sha256": "2b7a664d1b167dc43573152baceaecb8506c36ba5d07b6c11d5cb7711679a6cc",
+      "lines": 186,
+      "sections": 9,
+      "declarations": 9
     },
     {
       "file": "src/teamproject/task/TaskFrame.java",
@@ -124,10 +124,10 @@
     {
       "file": "src/teamproject/task/TaskBoardPanel.java",
       "owner": "윤*훈",
-      "sha256": "7d44573a874cc7550c936b7b8fd98dec8d41b0749b30a7269d07b7af8907e94b",
-      "lines": 90,
-      "sections": 4,
-      "declarations": 3
+      "sha256": "29585306dae804403123e3bb9ac50153b49901ac0288c1d1252a707ac3e1307e",
+      "lines": 113,
+      "sections": 6,
+      "declarations": 5
     },
     {
       "file": "src/teamproject/task/TaskCardRenderer.java",
@@ -180,18 +180,18 @@
     {
       "file": "src/teamproject/schedule/SchedulePanel.java",
       "owner": "이*주",
-      "sha256": "93c3b8c5737158ce5f49afd653db1c8909a0c188d07316a7ce3470884c5b54f8",
-      "lines": 203,
-      "sections": 8,
-      "declarations": 7
+      "sha256": "c422c964bdeae7b91a7bef6a1391cd88e4813b6cb82c7eabe476720e3d79bbf2",
+      "lines": 220,
+      "sections": 9,
+      "declarations": 9
     },
     {
       "file": "src/teamproject/resource/MainFrame.java",
       "owner": "신*준",
-      "sha256": "75518ba777d34699ae00476da684a51579eb64306a8f9d264659cdaa913209a7",
-      "lines": 98,
-      "sections": 4,
-      "declarations": 1
+      "sha256": "0ea511a083823aebffa133d6199746bee28d1a47072498e026a1daa4da139508",
+      "lines": 116,
+      "sections": 5,
+      "declarations": 4
     },
     {
       "file": "src/teamproject/resource/DashboardPanel.java",
@@ -220,10 +220,10 @@
     {
       "file": "src/teamproject/resource/IdeaPanel.java",
       "owner": "신*준",
-      "sha256": "005171cd58030888f01f334ee617b67d8e109dcb45b23bc2de4c782731242dfc",
-      "lines": 251,
-      "sections": 12,
-      "declarations": 13
+      "sha256": "d2725e2685cfb57f456a58ff4de698c63b6291df3ea68d0773d50c51bf794a57",
+      "lines": 269,
+      "sections": 14,
+      "declarations": 14
     },
     {
       "file": "src/teamproject/resource/IdeaDAO.java",
@@ -251,6 +251,6 @@
     }
   ],
   "total_java_files": 29,
-  "total_declarations": 178,
-  "total_sections": 190
+  "total_declarations": 194,
+  "total_sections": 202
 }

@@ -1,14 +1,14 @@
 # 파일·메서드 코드 색인
 
-이 표는 실제 소스에서 생성했습니다. 각 담당자의 모든 파일을 확인하고, 메서드 이름을 클릭해 구현을 따라 읽으세요. 생성자는 화면·객체 초기화, get으로 시작하는 단순 메서드는 값 조회입니다. 같은 이름도 파일에 따라 입력과 동작이 다르므로 실제 SQL·본문을 함께 확인하세요.
+각 메서드를 눌러 현재 소스의 선언 위치를 확인할 수 있습니다. 상세 브리핑은 [조원별 자료](member_briefings/README.md)를 참고하세요.
 
 ## common
 
-담당: **장*민** · [담당 설명](02_common.md)
+담당 **장*민**
 
 ### ActivityDAO.java
 
-활동 기록 저장·최근 목록 조회 · [소스](../src/teamproject/common/ActivityDAO.java)
+[활동 기록 저장·최근 목록 조회](../src/teamproject/common/ActivityDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -17,7 +17,7 @@
 
 ### DB_connection.java
 
-DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_connection.java)
+[DB 접속 설정과 연결 생성](../src/teamproject/common/DB_connection.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -26,18 +26,22 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### Main.java
 
-진입점·실행 모드와 DB 준비 · [소스](../src/teamproject/common/Main.java)
+[진입점·실행 모드와 DB 준비](../src/teamproject/common/Main.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
 | [main](../src/teamproject/common/Main.java#L12) | EDT에 시작 작업을 예약합니다. |
 | [start](../src/teamproject/common/Main.java#L17) | 모드를 선택하고 DB 준비 작업 후 로그인 창을 엽니다. |
-| [doInBackground](../src/teamproject/common/Main.java#L71) | 백그라운드에서 DB 연결·조회만 수행합니다. |
-| [done](../src/teamproject/common/Main.java#L82) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
+| [configureDemoDatabase](../src/teamproject/common/Main.java#L47) | 로컬 데모 파일 DB 주소를 설정합니다. |
+| [configureMySqlDatabase](../src/teamproject/common/Main.java#L57) | MySQL 접속 정보를 받고 취소 여부를 반환합니다. |
+| [showWaitingDialog](../src/teamproject/common/Main.java#L82) | DB 준비 안내창을 보여 주고 창 객체를 돌려줍니다. |
+| [DatabaseStartupWorker](../src/teamproject/common/Main.java#L98) | DB 준비에 필요한 모드와 대기창을 받습니다. |
+| [doInBackground](../src/teamproject/common/Main.java#L104) | 백그라운드에서 DB 연결·조회만 수행합니다. |
+| [done](../src/teamproject/common/Main.java#L116) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
 
 ### SchemaSetup.java
 
-전용 스키마·데모 가상 데이터 준비 · [소스](../src/teamproject/common/SchemaSetup.java)
+[전용 스키마·데모 가상 데이터 준비](../src/teamproject/common/SchemaSetup.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -46,7 +50,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### TeamDAO.java
 
-소속 팀 목록·공통 소속 검사 · [소스](../src/teamproject/common/TeamDAO.java)
+[소속 팀 목록·공통 소속 검사](../src/teamproject/common/TeamDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -59,11 +63,11 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ## member
 
-담당: **이*찬** · [담당 설명](03_member.md)
+담당 **이*찬**
 
 ### LoginFrame.java
 
-로그인 입력·팀 선택 · [소스](../src/teamproject/member/LoginFrame.java)
+[로그인 입력·팀 선택](../src/teamproject/member/LoginFrame.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -72,7 +76,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### MemberDAO.java
 
-팀원 SQL·두 표 변경 트랜잭션 · [소스](../src/teamproject/member/MemberDAO.java)
+[팀원 SQL·두 표 변경 트랜잭션](../src/teamproject/member/MemberDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -83,7 +87,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### MemberFrame.java
 
-팀원 표와 CRUD 입력창 · [소스](../src/teamproject/member/MemberFrame.java)
+[팀원 표와 CRUD 입력창](../src/teamproject/member/MemberFrame.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -95,7 +99,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### NoteDAO.java
 
-메모 데이터·버전 충돌·내용 이력 · [소스](../src/teamproject/member/NoteDAO.java)
+[메모 데이터·버전 충돌·내용 이력](../src/teamproject/member/NoteDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -103,12 +107,15 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 | [toString](../src/teamproject/member/NoteDAO.java#L34) | 목록·선택창에 보이는 대표 문자열을 반환합니다. |
 | [list](../src/teamproject/member/NoteDAO.java#L39) | 현재 팀 목록을 SQL로 조회하여 DTO 목록을 만듭니다. |
 | [save](../src/teamproject/member/NoteDAO.java#L63) | 입력·소속 검사 후 등록/수정하고 필요한 이력·활동을 함께 저장합니다. |
-| [delete](../src/teamproject/member/NoteDAO.java#L125) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
-| [history](../src/teamproject/member/NoteDAO.java#L136) | 현재 팀 메모의 내용 버전을 최신순 문자열로 반환합니다. |
+| [insertNote](../src/teamproject/member/NoteDAO.java#L99) | 메모를 삽입하고 DB가 발급한 번호를 반환합니다. |
+| [updateNote](../src/teamproject/member/NoteDAO.java#L119) | 기존 버전과 일치하는 메모만 수정합니다. |
+| [insertHistory](../src/teamproject/member/NoteDAO.java#L139) | 저장한 메모 본문의 버전을 이력 표에 남깁니다. |
+| [delete](../src/teamproject/member/NoteDAO.java#L151) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
+| [history](../src/teamproject/member/NoteDAO.java#L162) | 현재 팀 메모의 내용 버전을 최신순 문자열로 반환합니다. |
 
 ### NotePanel.java
 
-공유 메모 화면·폴링·편집 · [소스](../src/teamproject/member/NotePanel.java)
+[공유 메모 화면·폴링·편집](../src/teamproject/member/NotePanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -116,16 +123,17 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 | [addNotify](../src/teamproject/member/NotePanel.java#L71) | 패널이 화면에 붙으면 자동 갱신 타이머를 시작합니다. |
 | [removeNotify](../src/teamproject/member/NotePanel.java#L77) | 화면에서 떨어지면 타이머를 중지합니다. |
 | [reload](../src/teamproject/member/NotePanel.java#L83) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
-| [doInBackground](../src/teamproject/member/NotePanel.java#L87) | 백그라운드에서 DB 연결·조회만 수행합니다. |
-| [done](../src/teamproject/member/NotePanel.java#L93) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
-| [selected](../src/teamproject/member/NotePanel.java#L113) | 선택 항목을 반환하고 없으면 안내합니다. |
-| [edit](../src/teamproject/member/NotePanel.java#L119) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
-| [delete](../src/teamproject/member/NotePanel.java#L153) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
-| [history](../src/teamproject/member/NotePanel.java#L168) | 현재 팀 메모의 내용 버전을 최신순 문자열로 반환합니다. |
+| [doInBackground](../src/teamproject/member/NotePanel.java#L93) | 백그라운드에서 DB 연결·조회만 수행합니다. |
+| [done](../src/teamproject/member/NotePanel.java#L100) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
+| [updateList](../src/teamproject/member/NotePanel.java#L114) | 현재 선택을 기억하고 최신 목록에서 같은 번호를 다시 선택합니다. |
+| [selected](../src/teamproject/member/NotePanel.java#L131) | 선택 항목을 반환하고 없으면 안내합니다. |
+| [edit](../src/teamproject/member/NotePanel.java#L137) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
+| [delete](../src/teamproject/member/NotePanel.java#L171) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
+| [history](../src/teamproject/member/NotePanel.java#L186) | 현재 팀 메모의 내용 버전을 최신순 문자열로 반환합니다. |
 
 ### UserDAO.java
 
-로그인 인증 결과 · [소스](../src/teamproject/member/UserDAO.java)
+[로그인 인증 결과](../src/teamproject/member/UserDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -136,21 +144,23 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ## task
 
-담당: **윤*훈** · [담당 설명](04_task.md)
+담당 **윤*훈**
 
 ### TaskBoardPanel.java
 
-상태별 업무 분류·내 업무 필터 · [소스](../src/teamproject/task/TaskBoardPanel.java)
+[상태별 업무 분류·내 업무 필터](../src/teamproject/task/TaskBoardPanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
 | [TaskBoardPanel](../src/teamproject/task/TaskBoardPanel.java#L20) | 필드와 화면 부품·이벤트를 초기화하는 생성자입니다. |
-| [reload](../src/teamproject/task/TaskBoardPanel.java#L62) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
-| [move](../src/teamproject/task/TaskBoardPanel.java#L74) | 선택 카드의 상태를 바꾸고 세 칸을 다시 채웁니다. |
+| [clearOtherSelections](../src/teamproject/task/TaskBoardPanel.java#L63) | 선택하지 않은 상태 칸에서 선택을 해제합니다. |
+| [reload](../src/teamproject/task/TaskBoardPanel.java#L71) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
+| [findSelectedCard](../src/teamproject/task/TaskBoardPanel.java#L89) | 세 상태 목록을 확인해 선택한 카드를 반환합니다. |
+| [move](../src/teamproject/task/TaskBoardPanel.java#L99) | 선택 카드의 상태를 바꾸고 세 칸을 다시 채웁니다. |
 
 ### TaskCardRenderer.java
 
-업무 카드의 표시 · [소스](../src/teamproject/task/TaskCardRenderer.java)
+[업무 카드의 표시](../src/teamproject/task/TaskCardRenderer.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -159,7 +169,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### TaskDAO.java
 
-업무 SQL·보드 조회·메모 연결 · [소스](../src/teamproject/task/TaskDAO.java)
+[업무 SQL·보드 조회·메모 연결](../src/teamproject/task/TaskDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -191,7 +201,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### TaskFrame.java
 
-기존 업무 CRUD·표·진행률 통합 · [소스](../src/teamproject/task/TaskFrame.java)
+[기존 업무 CRUD·표·진행률 통합](../src/teamproject/task/TaskFrame.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -210,7 +220,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### TaskFromNoteDialog.java
 
-공유 메모에서 결정 업무 입력 · [소스](../src/teamproject/task/TaskFromNoteDialog.java)
+[공유 메모에서 결정 업무 입력](../src/teamproject/task/TaskFromNoteDialog.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -218,11 +228,11 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ## schedule
 
-담당: **이*주** · [담당 설명](05_schedule.md)
+담당 **이*주**
 
 ### InlineProgressDAO.java
 
-진행률 계산용 데이터 조회 · [소스](../src/teamproject/schedule/InlineProgressDAO.java)
+[진행률 계산용 데이터 조회](../src/teamproject/schedule/InlineProgressDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -230,7 +240,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### InlineProgressData.java
 
-개수·퍼센트·날짜 계산 · [소스](../src/teamproject/schedule/InlineProgressData.java)
+[개수·퍼센트·날짜 계산](../src/teamproject/schedule/InlineProgressData.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -251,7 +261,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### InlineProgressPanel.java
 
-진행률·마감 안내 표시 · [소스](../src/teamproject/schedule/InlineProgressPanel.java)
+[진행률·마감 안내 표시](../src/teamproject/schedule/InlineProgressPanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -265,7 +275,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### ScheduleDAO.java
 
-일정 SQL·기간 검증 · [소스](../src/teamproject/schedule/ScheduleDAO.java)
+[일정 SQL·기간 검증](../src/teamproject/schedule/ScheduleDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -278,25 +288,27 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### SchedulePanel.java
 
-월간 달력·일정 CRUD · [소스](../src/teamproject/schedule/SchedulePanel.java)
+[월간 달력·일정 CRUD](../src/teamproject/schedule/SchedulePanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
 | [isCellEditable](../src/teamproject/schedule/SchedulePanel.java#L26) | 내부 데이터 객체의 생성 또는 화면 입력 처리를 담당합니다. 본문과 인수를 확인하세요. |
 | [SchedulePanel](../src/teamproject/schedule/SchedulePanel.java#L32) | 필드와 화면 부품·이벤트를 초기화하는 생성자입니다. |
 | [reload](../src/teamproject/schedule/SchedulePanel.java#L88) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
-| [dayText](../src/teamproject/schedule/SchedulePanel.java#L122) | 해당 날짜의 별도 일정과 업무 마감일을 구분해 표시할 글자를 만듭니다. |
-| [selected](../src/teamproject/schedule/SchedulePanel.java#L145) | 선택 항목을 반환하고 없으면 안내합니다. |
-| [edit](../src/teamproject/schedule/SchedulePanel.java#L154) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
-| [delete](../src/teamproject/schedule/SchedulePanel.java#L190) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
+| [drawCalendar](../src/teamproject/schedule/SchedulePanel.java#L103) | 월의 요일에 맞춰 날짜와 일정·업무 칸을 그립니다. |
+| [fillScheduleTable](../src/teamproject/schedule/SchedulePanel.java#L130) | 별도 일정 목록을 표 모델에 채웁니다. |
+| [dayText](../src/teamproject/schedule/SchedulePanel.java#L139) | 해당 날짜의 별도 일정과 업무 마감일을 구분해 표시할 글자를 만듭니다. |
+| [selected](../src/teamproject/schedule/SchedulePanel.java#L162) | 선택 항목을 반환하고 없으면 안내합니다. |
+| [edit](../src/teamproject/schedule/SchedulePanel.java#L171) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
+| [delete](../src/teamproject/schedule/SchedulePanel.java#L207) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
 
 ## resource
 
-담당: **신*준** · [담당 설명](06_resource.md)
+담당 **신*준**
 
 ### ActivityPanel.java
 
-최근 활동 목록 화면 · [소스](../src/teamproject/resource/ActivityPanel.java)
+[최근 활동 목록 화면](../src/teamproject/resource/ActivityPanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -305,7 +317,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### DashboardPanel.java
 
-기존 진행률·업무·자료 요약 · [소스](../src/teamproject/resource/DashboardPanel.java)
+[기존 진행률·업무·자료 요약](../src/teamproject/resource/DashboardPanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -316,7 +328,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### IdeaCardRenderer.java
 
-아이디어 카드의 표시 · [소스](../src/teamproject/resource/IdeaCardRenderer.java)
+[아이디어 카드의 표시](../src/teamproject/resource/IdeaCardRenderer.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -325,7 +337,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### IdeaDAO.java
 
-게시물·댓글·공감 SQL · [소스](../src/teamproject/resource/IdeaDAO.java)
+[게시물·댓글·공감 SQL](../src/teamproject/resource/IdeaDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -341,7 +353,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### IdeaPanel.java
 
-아이디어 카드·댓글 입력·5초 갱신 · [소스](../src/teamproject/resource/IdeaPanel.java)
+[아이디어 카드·댓글 입력·5초 갱신](../src/teamproject/resource/IdeaPanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -349,27 +361,31 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 | [addNotify](../src/teamproject/resource/IdeaPanel.java#L87) | 패널이 화면에 붙으면 자동 갱신 타이머를 시작합니다. |
 | [removeNotify](../src/teamproject/resource/IdeaPanel.java#L93) | 화면에서 떨어지면 타이머를 중지합니다. |
 | [reload](../src/teamproject/resource/IdeaPanel.java#L98) | DB 결과를 다시 읽어 해당 화면 모델을 갱신합니다. |
-| [doInBackground](../src/teamproject/resource/IdeaPanel.java#L102) | 백그라운드에서 DB 연결·조회만 수행합니다. |
-| [done](../src/teamproject/resource/IdeaPanel.java#L108) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
-| [selected](../src/teamproject/resource/IdeaPanel.java#L128) | 선택 항목을 반환하고 없으면 안내합니다. |
-| [showDetail](../src/teamproject/resource/IdeaPanel.java#L134) | 선택 게시물과 댓글을 오른쪽에 표시합니다. |
-| [edit](../src/teamproject/resource/IdeaPanel.java#L158) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
-| [delete](../src/teamproject/resource/IdeaPanel.java#L195) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
-| [like](../src/teamproject/resource/IdeaPanel.java#L209) | 선택 게시물 공감을 토글하고 목록을 갱신합니다. |
-| [comment](../src/teamproject/resource/IdeaPanel.java#L220) | 댓글 입력을 검사하고 댓글·활동을 함께 저장합니다. |
-| [openLink](../src/teamproject/resource/IdeaPanel.java#L233) | 허용된 참고 링크를 브라우저로 엽니다. |
+| [doInBackground](../src/teamproject/resource/IdeaPanel.java#L108) | 백그라운드에서 DB 연결·조회만 수행합니다. |
+| [done](../src/teamproject/resource/IdeaPanel.java#L115) | 배경 작업의 결과를 받아 EDT에서 화면을 바꿉니다. |
+| [updateList](../src/teamproject/resource/IdeaPanel.java#L129) | 현재 선택을 기억하고 최신 목록에서 같은 번호를 다시 선택합니다. |
+| [selected](../src/teamproject/resource/IdeaPanel.java#L146) | 선택 항목을 반환하고 없으면 안내합니다. |
+| [showDetail](../src/teamproject/resource/IdeaPanel.java#L152) | 선택 게시물과 댓글을 오른쪽에 표시합니다. |
+| [edit](../src/teamproject/resource/IdeaPanel.java#L176) | 입력창에서 값을 읽고 저장 실패 시 입력 수정 기회를 줍니다. |
+| [delete](../src/teamproject/resource/IdeaPanel.java#L213) | 현재 팀과 식별 조건에 맞는 행만 삭제합니다. |
+| [like](../src/teamproject/resource/IdeaPanel.java#L227) | 선택 게시물 공감을 토글하고 목록을 갱신합니다. |
+| [comment](../src/teamproject/resource/IdeaPanel.java#L238) | 댓글 입력을 검사하고 댓글·활동을 함께 저장합니다. |
+| [openLink](../src/teamproject/resource/IdeaPanel.java#L251) | 허용된 참고 링크를 브라우저로 엽니다. |
 
 ### MainFrame.java
 
-9개 탭 생성·같은 사용자와 팀 전달 · [소스](../src/teamproject/resource/MainFrame.java)
+[9개 탭 생성·같은 사용자와 팀 전달](../src/teamproject/resource/MainFrame.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
-| [MainFrame](../src/teamproject/resource/MainFrame.java#L21) | 필드와 화면 부품·이벤트를 초기화하는 생성자입니다. |
+| [MainFrame](../src/teamproject/resource/MainFrame.java#L34) | 필드와 화면 부품·이벤트를 초기화하는 생성자입니다. |
+| [addTaskTab](../src/teamproject/resource/MainFrame.java#L66) | 업무 화면을 만들어 탭에 붙입니다. |
+| [addMemberTab](../src/teamproject/resource/MainFrame.java#L77) | 팀원 화면을 만들어 탭에 붙입니다. |
+| [stateChanged](../src/teamproject/resource/MainFrame.java#L89) | 탭 선택이 바뀌면 해당 화면만 새로고침합니다. |
 
 ### MaterialDAO.java
 
-자료 링크 SQL·업로더 저장 · [소스](../src/teamproject/resource/MaterialDAO.java)
+[자료 링크 SQL·업로더 저장](../src/teamproject/resource/MaterialDAO.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
@@ -388,7 +404,7 @@ DB 접속 설정과 연결 생성 · [소스](../src/teamproject/common/DB_conne
 
 ### MaterialPanel.java
 
-자료 표·입력·브라우저 열기 · [소스](../src/teamproject/resource/MaterialPanel.java)
+[자료 표·입력·브라우저 열기](../src/teamproject/resource/MaterialPanel.java)
 
 | 메서드·생성자 | 처리 흐름·역할 |
 |---|---|
