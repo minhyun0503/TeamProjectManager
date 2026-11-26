@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.common;
 
 // 로그인한 사용자 정보를 프로그램 전체에서 함께 쓰기 위한 클래스
 // - 변수가 static이라서 객체를 만들지 않고 LoginUser.getName() 처럼 바로 쓸 수 있다.

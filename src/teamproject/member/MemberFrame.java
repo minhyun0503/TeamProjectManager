@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.member;
 
 
 // Swing 화면 관련 클래스

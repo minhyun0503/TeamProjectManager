@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.common;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -7,6 +7,15 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import teamproject.collab.BoardPanel;
+import teamproject.dashboard.DashboardPanel;
+import teamproject.collab.KanbanPanel;
+import teamproject.material.MaterialPanel;
+import teamproject.member.MemberFrame;
+import teamproject.collab.MemoPanel;
+import teamproject.collab.PagePanel;
+import teamproject.collab.SchedulePanel;
+import teamproject.task.TaskFrame;
 
 // 로그인 후 열리는 통합 화면. 기능별 화면을 탭으로 모아 보여준다.
 public class MainFrame extends JFrame {

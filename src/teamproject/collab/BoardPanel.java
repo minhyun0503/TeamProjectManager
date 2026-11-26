@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.collab;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.Timer;
+import teamproject.common.LoginUser;
 
 // 포스트잇 보드 화면 (패들렛처럼 팀원이 아이디어 · 공지를 카드로 붙이는 게시판)
 // - 한 줄에 카드 4장씩 최신 글부터 보여준다.

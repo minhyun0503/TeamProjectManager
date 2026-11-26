@@ -15,7 +15,7 @@
 2. Eclipse에서 프로젝트를 가져옵니다. (`File` → `Import` → `Existing Projects into Workspace` → 클론한 폴더 선택)
 3. MySQL Connector/J(JDBC 드라이버)는 `lib` 폴더에 포함되어 있어서 따로 추가할 필요가 없습니다.
    - 빨간 오류가 보이면 프로젝트 우클릭 → `Refresh`(F5) 후 `Project` → `Clean`을 해보세요.
-4. `src/teamproject/Main.java`를 실행하고, 비밀번호 창에 DB 비밀번호를 입력합니다.
+4. `src/teamproject/common/Main.java`를 실행하고, 비밀번호 창에 DB 비밀번호를 입력합니다.
    - DB 비밀번호는 공개 저장소에 기록하지 말고 팀 내부의 안전한 경로로 공유합니다.
 
 ※ Aiven 무료 서비스는 오래 사용하지 않으면 자동으로 꺼질 수 있습니다. 연결이 안 되면 팀장에게 알려주세요. (발표 전 Running 상태 확인)
@@ -55,34 +55,37 @@ DB 비밀번호(접속용)와 위 로그인 비밀번호는 서로 다른 것입
 TeamProjectManager/
 ├── src/
 │   ├── module-info.java
-│   └── teamproject/
-│       ├── Main.java            프로그램 시작, DB 비밀번호 입력, 연결 후 로그인 창 실행
-│       ├── LoginFrame.java      로그인 화면 (성공하면 통합 화면으로 이동)
-│       ├── LoginUser.java       로그인한 사용자 번호·이름 보관 (작성자 기록용)
-│       ├── MainFrame.java       기능별 탭 9개를 담는 통합 화면, 협업 표 준비
-│       ├── CollabSchema.java    협업 기능 표 자동 생성, 자료 표를 자료 관리 코드에 맞춤
-│       ├── DashboardPanel.java  팀 진행률, 업무 목록, 최근 자료 5건 표시
-│       ├── MaterialDAO.java     자료 조회·등록·수정·삭제, 최근 자료 조회
-│       ├── MaterialPanel.java   자료 관리 화면과 URL 링크 열기
-│       ├── DB_connection.java   클라우드 MySQL 연결
-│       ├── UserDAO.java         users 표 처리 (로그인 확인)
-│       ├── TaskDAO.java         업무 조회·등록·수정·삭제·상태 변경, 담당자 조회
-│       ├── TaskFrame.java       업무 화면, 관리 버튼, 표 열 너비 자동 조절
-│       ├── MemberDAO.java       팀원 조회·등록·수정·팀 소속 삭제
-│       ├── MemberFrame.java     팀원 관리 화면
-│       ├── InlineProgressDAO.java    진행률 계산용 팀원·업무 조회
-│       ├── InlineProgressData.java   진행률·마감 안내 계산
-│       ├── InlineProgressPanel.java  전체·개인 진행률과 마감 안내 표시
-│       ├── KanbanDAO.java       칸반 보드용 업무 카드 조회
-│       ├── KanbanPanel.java     칸반 보드 (할 일 / 진행 중 / 완료, 단계 이동)
-│       ├── ScheduleDAO.java     일정 조회·등록·수정·삭제, D-day 계산
-│       ├── SchedulePanel.java   일정 화면
-│       ├── MemoDAO.java         팀 공동 메모 읽기·저장 (저장 충돌 확인)
-│       ├── MemoPanel.java       실시간 팀 메모장 (3초마다 자동 저장·동기화)
-│       ├── BoardDAO.java        포스트잇 조회·등록·좋아요·삭제
-│       ├── BoardPanel.java      아이디어 보드 (패들렛 스타일 포스트잇)
-│       ├── PageDAO.java         문서 페이지 조회·등록·수정·삭제
-│       └── PagePanel.java       문서 화면 (노션 스타일 페이지 목록 + 편집, 서식 제공)
+│   └── teamproject/                 (담당자별 패키지)
+│       ├── common/                  장*민 · 공통 시스템
+│       │   ├── Main.java            프로그램 시작, DB 비밀번호 입력, 연결 후 로그인 창 실행
+│       │   ├── MainFrame.java       기능별 탭 9개를 담는 통합 화면, 협업 표 준비
+│       │   ├── DB_connection.java   클라우드 MySQL 연결
+│       │   ├── LoginUser.java       로그인한 사용자 번호·이름 보관 (작성자 기록용)
+│       │   └── CollabSchema.java    협업 기능 표 자동 생성, 자료 표를 자료 관리 코드에 맞춤
+│       ├── collab/                  장*민 · 협업 기능
+│       │   ├── KanbanDAO / KanbanPanel      칸반 보드 (할 일 / 진행 중 / 완료, 단계 이동)
+│       │   ├── ScheduleDAO / SchedulePanel  일정 등록·수정·삭제, D-day 계산
+│       │   ├── MemoDAO / MemoPanel          실시간 팀 메모장 (3초마다 자동 저장·동기화, 저장 충돌 확인)
+│       │   ├── BoardDAO / BoardPanel        아이디어 보드 (패들렛 스타일 포스트잇)
+│       │   └── PageDAO / PagePanel          문서 (노션 스타일 페이지 목록 + 편집, 서식 제공)
+│       ├── login/                   이*찬 · 로그인
+│       │   ├── LoginFrame.java      로그인 화면 (성공하면 통합 화면으로 이동)
+│       │   └── UserDAO.java         users 표 처리 (로그인 확인)
+│       ├── member/                  이*찬 · 팀원 관리
+│       │   ├── MemberDAO.java       팀원 조회·등록·수정·팀 소속 삭제
+│       │   └── MemberFrame.java     팀원 관리 화면
+│       ├── task/                    윤*훈 · 업무 관리
+│       │   ├── TaskDAO.java         업무 조회·등록·수정·삭제·상태 변경, 담당자 조회
+│       │   └── TaskFrame.java       업무 화면, 관리 버튼, 표 열 너비 자동 조절
+│       ├── progress/                이*주 · 진행률
+│       │   ├── InlineProgressDAO.java    진행률 계산용 팀원·업무 조회
+│       │   ├── InlineProgressData.java   진행률·마감 안내 계산
+│       │   └── InlineProgressPanel.java  전체·개인 진행률과 마감 안내 표시
+│       ├── material/                신*준 · 자료 관리
+│       │   ├── MaterialDAO.java     자료 조회·등록·수정·삭제, 최근 자료 조회
+│       │   └── MaterialPanel.java   자료 관리 화면과 URL 링크 열기
+│       └── dashboard/               신*준 · 대시보드
+│           └── DashboardPanel.java  팀 진행률, 업무 목록, 최근 자료 5건 표시
 ├── lib/
 │   └── mysql-connector-j-26.10.0.jar   MySQL JDBC 드라이버
 ├── db/

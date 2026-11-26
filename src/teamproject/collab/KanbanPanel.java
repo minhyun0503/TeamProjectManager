@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.collab;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import teamproject.task.TaskDAO;
 
 // 칸반 보드 화면 (노션 · 트렐로의 보드 보기처럼 업무를 상태별 세 칸으로 나눠 보여줌)
 // - 칸: 할 일 → 진행 중 → 완료

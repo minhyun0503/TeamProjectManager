@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.login;
 
 import java.awt.GridLayout;
 import java.sql.Connection;
@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import teamproject.common.LoginUser;
+import teamproject.common.MainFrame;
 
 public class LoginFrame extends JFrame { // 로그인 창 (JFrame을 상속)
 

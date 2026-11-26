@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.collab;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import teamproject.common.LoginUser;
 
 // 팀 공동 메모장 화면 (구글 문서 · 실시간 메모장처럼 여러 명이 같은 메모를 함께 씀)
 //

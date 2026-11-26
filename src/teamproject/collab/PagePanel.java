@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.collab;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import teamproject.common.LoginUser;
 
 // 문서 페이지 화면 (노션처럼 왼쪽 페이지 목록 + 오른쪽 편집 영역)
 // - 새 페이지를 만들 때 회의록 · 발표 준비 같은 서식(템플릿)을 고를 수 있다.

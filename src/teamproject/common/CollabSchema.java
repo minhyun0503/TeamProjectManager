@@ -1,8 +1,9 @@
-package teamproject;
+package teamproject.common;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import teamproject.material.MaterialDAO;
 
 // 협업 기능(메모장 · 포스트잇 보드 · 문서)에 필요한 DB 표를 준비하는 클래스
 // - 프로그램을 켤 때 MainFrame에서 한 번 호출한다.

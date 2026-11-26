@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.material;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

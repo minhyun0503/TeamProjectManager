@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.progress;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import teamproject.task.TaskDAO;
 
 // [이*주 담당 3] 계산한 값을 기존 업무 화면에 보여줍니다.
 // ActionListener: 버튼 클릭과 이름 선택을 처리합니다.
