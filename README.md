@@ -3,7 +3,7 @@
 팀프로젝트의 업무 분담, 일정, 자료를 한곳에서 관리하고, 실시간 메모장 · 포스트잇 보드 · 문서 페이지로 팀원끼리 협업하는 Java Swing + JDBC + MySQL 데스크톱 프로그램입니다.
 
 ## 기술 스택
-- Java (Swing GUI), JavaSE-25
+- Java (Swing GUI), Java 17 (Eclipse 2023-12 기준)
 - MySQL 8 (Aiven 무료 클라우드 DB, SSL 필수)
 - JDBC (MySQL Connector/J)
 - 구조: Java GUI → DAO(표마다 하나) → JDBC → 클라우드 MySQL
@@ -12,7 +12,9 @@
 같은 클라우드 DB 를 사용합니다. MySQL을 따로 설치하거나 `schema.sql`을 실행할 필요가 없습니다.
 
 1. GitHub Desktop에서 이 레포를 Clone 합니다. (`File` → `Clone repository`)
-2. Eclipse에서 프로젝트를 가져옵니다. (`File` → `Import` → `Existing Projects into Workspace` → 클론한 폴더 선택)
+2. Eclipse 2023-12에서 프로젝트를 가져옵니다. (`File` → `Import` → `Existing Projects into Workspace` → 클론한 폴더 선택)
+   - 프로젝트는 Java 17, 글자 인코딩 UTF-8로 설정되어 있습니다. (Eclipse 2023-12에 기본으로 들어 있는 Java 17로 바로 실행됩니다)
+   - `Unbound classpath container: JavaSE-17` 오류가 보이면 `Window` → `Preferences` → `Java` → `Installed JREs`에서 Java 17 이상 JRE를 추가하고 `Execution Environments`의 JavaSE-17에 체크합니다.
 3. MySQL Connector/J(JDBC 드라이버)는 `lib` 폴더에 포함되어 있어서 따로 추가할 필요가 없습니다.
    - 빨간 오류가 보이면 프로젝트 우클릭 → `Refresh`(F5) 후 `Project` → `Clean`을 해보세요.
 4. `src/teamproject/common/Main.java`를 실행하고, 비밀번호 창에 DB 비밀번호를 입력합니다.
