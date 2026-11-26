@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.login;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +30,24 @@ public class UserDAO { // users 표 관련 SQL을 담당하는 클래스
 
                 // 일치하는 줄이 없으면 로그인 실패
                 return null;
+            }
+        }
+    }
+
+    // 아이디(학번)로 사용자 번호(user_id)를 찾는 메서드. 없으면 0 반환
+    // 로그인 성공 후 "누가 로그인했는지"를 LoginUser에 저장할 때 사용한다.
+    public static int findUserId(Connection conn, String loginId) throws SQLException {
+
+        String sql = "SELECT user_id FROM users WHERE login_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, loginId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("user_id");
+                }
+                return 0;
             }
         }
     }

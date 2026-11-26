@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -18,6 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import teamproject.progress.InlineProgressDAO;
+import teamproject.progress.InlineProgressData;
+import teamproject.material.MaterialDAO;
 
 public class DashboardPanel extends JPanel {
 

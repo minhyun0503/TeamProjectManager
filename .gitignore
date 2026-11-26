@@ -1,3 +1,6 @@
 bin/
-.settings/
 *.class
+# Eclipse 설정은 Java 17 · UTF-8 두 파일만 공유
+.settings/*
+!.settings/org.eclipse.jdt.core.prefs
+!.settings/org.eclipse.core.resources.prefs

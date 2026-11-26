@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.material;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;

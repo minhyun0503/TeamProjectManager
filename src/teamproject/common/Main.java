@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.common;
 
 import java.sql.Connection; //DB연결을 나타내는 인터페이스
 import java.sql.DriverManager; 
@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import java.util.Arrays; //자바 배열관련
 import javax.swing.JPasswordField;//입력한 문자를 화면에서 가려주는 비밀번호 입력 컴포넌트
+import teamproject.login.LoginFrame;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package teamproject;
+package teamproject.task;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
@@ -27,6 +27,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import teamproject.progress.InlineProgressPanel;
+import teamproject.member.MemberFrame;
 
 public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클래스 | extends 키워드 :  JFrame의 기능 상속
 
