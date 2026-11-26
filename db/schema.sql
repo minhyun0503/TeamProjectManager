@@ -60,16 +60,54 @@ CREATE TABLE schedules (
 );
 
 -- ⑥ 자료
+-- (자료 관리 코드에 맞춰 url 칸 추가, uploader_id는 비워도 됨. link_url은 예전 링크 보관용)
 CREATE TABLE materials (
     material_id INT AUTO_INCREMENT PRIMARY KEY,
     team_id     INT NOT NULL,
     title       VARCHAR(100) NOT NULL,
     link_url    VARCHAR(255),
+    url         VARCHAR(500) NOT NULL DEFAULT '',
     description TEXT,
-    uploader_id INT NOT NULL,
+    uploader_id INT NULL,
     created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (team_id) REFERENCES teams(team_id),
     FOREIGN KEY (uploader_id) REFERENCES users(user_id)
+);
+
+-- ⑦ 팀 공동 메모장 (팀마다 1개, version: 저장할 때마다 1씩 증가)
+CREATE TABLE team_memo (
+    team_id    INT PRIMARY KEY,
+    content    TEXT,
+    version    INT NOT NULL DEFAULT 0,
+    updated_by INT NULL,
+    updated_at DATETIME NULL,
+    FOREIGN KEY (team_id) REFERENCES teams(team_id),
+    FOREIGN KEY (updated_by) REFERENCES users(user_id)
+);
+
+-- ⑧ 아이디어 보드 포스트잇
+CREATE TABLE board_posts (
+    post_id    INT AUTO_INCREMENT PRIMARY KEY,
+    team_id    INT NOT NULL,
+    user_id    INT NOT NULL,
+    content    VARCHAR(500) NOT NULL,
+    color      VARCHAR(20) NOT NULL DEFAULT '노랑',
+    likes      INT NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (team_id) REFERENCES teams(team_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- ⑨ 문서 페이지
+CREATE TABLE pages (
+    page_id    INT AUTO_INCREMENT PRIMARY KEY,
+    team_id    INT NOT NULL,
+    title      VARCHAR(100) NOT NULL,
+    content    TEXT,
+    updated_by INT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (team_id) REFERENCES teams(team_id),
+    FOREIGN KEY (updated_by) REFERENCES users(user_id)
 );
 
 -- 아래 계정은 공개 저장소용 가상 샘플 데이터이며 실제 팀원의 개인정보가 아닙니다.
@@ -100,8 +138,8 @@ VALUES (1, 'Java와 MySQL 연결 구현', 1, '완료', '2026-11-04');
 INSERT INTO schedules (team_id, title, start_date, end_date)
 VALUES (1, '중간발표', '2026-11-05', '2026-11-05');
 
-INSERT INTO materials (team_id, title, link_url, uploader_id)
-VALUES (1, '1차 발표자료', 'https://example.com', 1);
+INSERT INTO materials (team_id, title, link_url, url, uploader_id)
+VALUES (1, '1차 발표자료', 'https://example.com', 'https://example.com', 1);
 
 -- 확인
 SHOW TABLES;

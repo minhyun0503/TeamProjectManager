@@ -70,6 +70,10 @@ public class LoginFrame extends JFrame { // 로그인 창 (JFrame을 상속)
             String name = UserDAO.login(conn, loginId, loginPw);
 
             if (name != null) {
+                // 로그인한 사람을 기억해 둔다 (메모장 · 포스트잇 · 문서의 작성자 기록용)
+                int userId = UserDAO.findUserId(conn, loginId);
+                LoginUser.login(userId, name);
+
                 JOptionPane.showMessageDialog(this, name + "님 환영합니다!");
                 new MainFrame(conn).setVisible(true); // 대시보드·업무·팀원·자료 통합 화면 열기
                 dispose();                            // 로그인 창 닫기
