@@ -42,6 +42,9 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
     // [업무 관리 추가] 현재 팀 번호. 지금은 MemberFrame 호출부와 같이 1번 팀으로 고정.
     // 팀 선택 기능이 완성되면 생성자로 전달받도록 바꾼다.
     private int teamId = 1;
+
+    // [새로고침 수정] 진행률 패널. 업무 목록을 새로 읽을 때 진행률 · 마감 안내도 함께 갱신한다.
+    private InlineProgressPanel progressPanel;
 	
     // 업무 관리 화면 생성
     public TaskFrame(Connection conn) throws SQLException{
@@ -110,11 +113,18 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
         add(buttonPanel, BorderLayout.SOUTH); // 버튼 패널을 화면 아래에 배치
         TaskDAO.loadTasks(conn, tableModel); //taskDAO클래스에서 tableModel(표)에 데이터 채워넣는 단계
-        InlineProgressPanel.attach(this, conn, tableModel, teamId); // [이*주 추가] 진행률 연결
+        progressPanel = InlineProgressPanel.attach(this, conn, tableModel, teamId); // [이*주 추가] 진행률 연결
 
         // [열 너비 추가] 표 내용이 바뀔 때마다(조회, 등록, 수정 등) 열 너비를 글자 길이에 맞춘다
         tableModel.addTableModelListener(e -> SwingUtilities.invokeLater(this::fitColumns));
         fitColumns(); // 처음 화면을 열 때도 한 번 맞춘다
+    }
+
+    // [새로고침 수정] 업무 목록 + 진행률 + 마감 안내를 한 번에 새로 읽는다.
+    // 예전에는 등록 · 수정 · 삭제 후 표만 다시 채워서 "마감 안내" 열이 비고 진행률이 옛날 값으로 남았다.
+    // 통합 화면(MainFrame)에서 업무 관리 탭을 열 때도 호출한다.
+    public void reload() {
+        progressPanel.refresh();
     }
 
     // ================================================================
@@ -182,8 +192,8 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
             JOptionPane.showMessageDialog(this, "업무 등록 성공!");
 
-            // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            // 업무 목록 새로고침 (진행률 · 마감 안내 포함)
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "업무 등록 실패: " + e.getMessage());
@@ -207,7 +217,7 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
             if (old == null) {
                 JOptionPane.showMessageDialog(this, "이미 삭제된 업무입니다.");
-                TaskDAO.loadTasks(conn, tableModel);
+                reload();
                 return;
             }
 
@@ -231,8 +241,8 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
                 JOptionPane.showMessageDialog(this, "이미 삭제되었거나 존재하지 않는 업무입니다.");
             }
 
-            // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            // 업무 목록 새로고침 (진행률 · 마감 안내 포함)
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "업무 수정 실패: " + e.getMessage());
@@ -269,8 +279,8 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
             JOptionPane.showMessageDialog(this, "업무가 삭제되었습니다.");
 
-            // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            // 업무 목록 새로고침 (진행률 · 마감 안내 포함)
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "삭제 오류: " + e.getMessage());
@@ -293,8 +303,8 @@ public class TaskFrame extends JFrame { //업무 관리 화면(GUI) 담당 클�
 
             JOptionPane.showMessageDialog(this, "완료 처리되었습니다.");
 
-            // 업무 목록 새로고침
-            TaskDAO.loadTasks(conn, tableModel);
+            // 업무 목록 새로고침 (진행률 · 마감 안내 포함)
+            reload();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "완료 처리 오류: " + e.getMessage());

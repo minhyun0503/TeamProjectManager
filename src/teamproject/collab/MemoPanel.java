@@ -112,6 +112,12 @@ public class MemoPanel extends JPanel {
 
     // 탭을 열었을 때 MainFrame에서도 호출한다
     public void reload() {
+        // [새로고침 수정] 아직 저장 안 한 글이 있으면 덮어쓰지 말고 먼저 저장한다.
+        // (입력 후 3초 안에 새로고침을 누르거나 다른 탭에 다녀오면 쓴 글이 사라지던 문제)
+        if (changed) {
+            sync();
+            return;
+        }
         try {
             MemoDAO.MemoInfo memo = MemoDAO.loadMemo(conn, teamId);
             showMemo(memo);

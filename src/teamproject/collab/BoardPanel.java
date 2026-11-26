@@ -104,12 +104,12 @@ public class BoardPanel extends JPanel {
                 snapshot.append(post.getPostId()).append(':').append(post.getLikes()).append(',');
             }
 
-            if (snapshot.toString().equals(lastSnapshot)) {
-                return; // 바뀐 것이 없으면 그대로 둔다
+            // [새로고침 수정] 바뀐 것이 없어도 "몇 시 기준"인지는 매번 갱신한다
+            //  (예전에는 마지막으로 바뀐 시각에 멈춰 있어서 자동 새로고침이 멈춘 것처럼 보였다)
+            if (!snapshot.toString().equals(lastSnapshot)) {
+                lastSnapshot = snapshot.toString();
+                drawCards(posts); // 바뀐 것이 있을 때만 다시 그린다
             }
-            lastSnapshot = snapshot.toString();
-
-            drawCards(posts);
             infoLabel.setText("포스트잇 " + posts.size() + "장  ·  "
                     + new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) + " 기준");
 

@@ -135,6 +135,13 @@ public class PagePanel extends JPanel {
             selectInList(currentPageId); // 보고 있던 페이지를 다시 선택 표시
             selecting = false;
 
+            // [새로고침 수정] 보고 있던 페이지를 내가 고치는 중이 아니면 DB 최신 내용으로 다시 연다.
+            // (예전에는 목록만 새로 읽어서, 다른 팀원이 고친 본문이 안 보이고
+            //  그대로 저장하면 팀원의 수정이 덮어써졌다)
+            if (currentPageId != 0 && !changed) {
+                refreshOpenPage();
+            }
+
         } catch (SQLException e) {
             selecting = false;
             JOptionPane.showMessageDialog(this, "페이지 목록 불러오기 실패: " + e.getMessage());
@@ -185,6 +192,28 @@ public class PagePanel extends JPanel {
             loading = false;
             JOptionPane.showMessageDialog(this, "페이지 열기 실패: " + e.getMessage());
         }
+    }
+
+    // 열려 있는 페이지 본문을 DB 최신 내용으로 바꾼다 (커서 위치는 최대한 유지)
+    private void refreshOpenPage() throws SQLException {
+        PageDAO.PageInfo page = PageDAO.findPage(conn, currentPageId);
+        if (page == null) {
+            // 다른 팀원이 삭제한 페이지
+            clearEditor();
+            JOptionPane.showMessageDialog(this, "보고 있던 페이지를 다른 팀원이 삭제했습니다.");
+            return;
+        }
+
+        String content = (page.getContent() == null) ? "" : page.getContent();
+        if (!page.getTitle().equals(titleField.getText()) || !content.equals(contentArea.getText())) {
+            int caret = contentArea.getCaretPosition();
+            loading = true;
+            titleField.setText(page.getTitle());
+            contentArea.setText(content);
+            loading = false;
+            contentArea.setCaretPosition(Math.min(caret, content.length()));
+        }
+        showInfo(page);
     }
 
     // [+ 새 페이지] 버튼: 서식을 고르고 페이지를 만든다

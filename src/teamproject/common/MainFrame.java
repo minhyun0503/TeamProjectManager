@@ -47,12 +47,14 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("대시보드", dashboardPanel);
 
         // ── 업무 ──
+        TaskFrame taskFrame = null;
         try {
-            TaskFrame taskFrame = new TaskFrame(conn);
+            taskFrame = new TaskFrame(conn);
             tabbedPane.addTab("업무 관리", taskFrame.getContentPane());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        final TaskFrame taskTab = taskFrame; // 아래 탭 전환 코드에서 쓰려고 final 변수로 담아 둔다
 
         KanbanPanel kanbanPanel = new KanbanPanel(conn, teamId);
         tabbedPane.addTab("칸반 보드", kanbanPanel);
@@ -88,6 +90,9 @@ public class MainFrame extends JFrame {
 
             if (selected == dashboardPanel) {
                 dashboardPanel.reload();
+            } else if (taskTab != null && selected == taskTab.getContentPane()) {
+                // [새로고침 수정] 칸반 보드에서 상태를 바꾸고 와도 업무 표 · 진행률이 최신으로 보이게
+                taskTab.reload();
             } else if (selected == kanbanPanel) {
                 kanbanPanel.reload();
             } else if (selected == schedulePanel) {

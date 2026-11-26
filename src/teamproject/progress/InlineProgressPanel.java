@@ -41,11 +41,13 @@ public class InlineProgressPanel extends JPanel
     // 팀원 TaskFrame 생성자의 첫 TaskDAO.loadTasks(conn, tableModel); 바로 아래에
     // InlineProgressPanel.attach(this, conn, tableModel, teamId); 를 한 번 추가합니다.
     // 아래 메서드는 기존 업무 화면 위에 내 패널을 붙이는 역할입니다.
-    public static void attach(JFrame frame, Connection conn,
+    // [새로고침 수정] 붙인 패널을 돌려줘서 업무 화면이 등록 · 수정 후 진행률도 같이 갱신할 수 있게 한다.
+    public static InlineProgressPanel attach(JFrame frame, Connection conn,
             DefaultTableModel taskModel, int teamId) {
         InlineProgressPanel panel = new InlineProgressPanel(conn, taskModel, teamId);
         frame.add(panel, BorderLayout.NORTH);
         frame.revalidate();
+        return panel;
     }
 
     public InlineProgressPanel(Connection conn, DefaultTableModel taskModel, int teamId) {
@@ -96,15 +98,20 @@ public class InlineProgressPanel extends JPanel
         if (event.getSource() == personBox) {
             showProgress();
         } else if (event.getSource() == refreshButton) {
-            try {
-                // 기존 업무 조회 함수를 그대로 사용합니다.
-                // 업무 표를 채운 다음 내 진행률과 마감 안내도 다시 계산합니다.
-                TaskDAO.loadTasks(conn, taskModel);
-                reload();
-            } catch (SQLException ex) {
-                notice.setText("조회 실패 · 기존 값은 최신이 아닐 수 있음");
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-            }
+            refresh();
+        }
+    }
+
+    // 업무 표를 DB에서 다시 채운 다음 진행률과 마감 안내도 다시 계산합니다.
+    // 새로고침 버튼, 업무 등록 · 수정 · 삭제 후, 업무 관리 탭을 열 때 호출됩니다.
+    public void refresh() {
+        try {
+            // 기존 업무 조회 함수를 그대로 사용합니다.
+            TaskDAO.loadTasks(conn, taskModel);
+            reload();
+        } catch (SQLException ex) {
+            notice.setText("조회 실패 · 기존 값은 최신이 아닐 수 있음");
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

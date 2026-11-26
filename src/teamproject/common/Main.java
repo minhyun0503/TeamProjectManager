@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import java.util.Arrays; //자바 배열관련
+import java.util.TimeZone;
 import javax.swing.JPasswordField;//입력한 문자를 화면에서 가려주는 비밀번호 입력 컴포넌트
 import teamproject.login.LoginFrame;
 
@@ -13,6 +14,11 @@ public class Main {
 
     // MySQL 접속 정보
     public static void main(String[] args) {
+
+        // [시간대] PC의 시간대 설정과 상관없이 프로그램 전체를 한국시간으로 맞춘다.
+        // 화면에 보이는 시각, 오늘 날짜(LocalDate.now()) 계산이 모두 한국시간 기준이 된다.
+        // DB 연결보다 먼저 실행해야 한다.
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
     	
     	JPasswordField passwordField = new JPasswordField(); //비밀번호 입력칸 객체 생성
     	 
